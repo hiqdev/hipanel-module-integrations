@@ -1,4 +1,4 @@
-# HiPanel Integratinos Module
+# HiPanel Integrations
 
 **Integrations management plugin for HiPanel**
 

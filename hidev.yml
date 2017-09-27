@@ -2,7 +2,7 @@ package:
     type:           yii2-extension
     name:           hipanel-module-integrations
     title:          Integrations management plugin for HiPanel
-    headline:       HiPanel Integratinos Module
+    headline:       HiPanel Integrations
     keywords:       integrations, hipanel, plugin
     namespace:      hipanel\modules\integrations
     description:    |
