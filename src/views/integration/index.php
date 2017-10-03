@@ -21,6 +21,10 @@ $subtitle = array_filter(Yii::$app->request->get($model->formName(), [])) ? Yii:
                     'filterModel'  => $model,
                     'columns'      => [
                         'checkbox',
+                        'actions',
+                        'name',
+                        'provider',
+                        'state',
                     ],
                 ]) ?>
             <?php $page->endBulkForm() ?>

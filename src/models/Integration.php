@@ -14,7 +14,8 @@ class Integration extends \hipanel\base\Model
     public function rules()
     {
         return array_merge(parent::rules(), [
-            [['id'], 'integer'],
+            [['id', 'client_id', 'type_id', 'state_id', 'provider_id'], 'integer'],
+            [['client', 'state', 'provider', 'name', 'url', 'login', 'access'], 'string'],
         ]);
     }
 
@@ -23,8 +24,6 @@ class Integration extends \hipanel\base\Model
      */
     public function attributeLabels()
     {
-        return array_merge(parent::attributeLabels(), [
-            'id' => Yii::t('hipanel.integrations', 'ID'),
-        ]);
+        return array_merge(parent::attributeLabels(), []);
     }
 }

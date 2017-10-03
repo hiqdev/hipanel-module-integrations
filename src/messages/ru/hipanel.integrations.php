@@ -2,5 +2,5 @@
 
 return [
     'Settings' => 'Настройки',
-    'Integrations' => 'Интеграция',
+    'Integrations' => 'Интеграции',
 ];
