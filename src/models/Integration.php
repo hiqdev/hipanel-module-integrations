@@ -15,7 +15,11 @@ class Integration extends \hipanel\base\Model
     {
         return array_merge(parent::rules(), [
             [['id', 'client_id', 'type_id', 'state_id', 'provider_id'], 'integer'],
-            [['client', 'state', 'provider', 'name', 'url', 'login', 'access'], 'string'],
+            [['client', 'state', 'provider', 'name', 'url', 'login', 'access', 'password'], 'string'],
+
+            // Create / Update
+            [['id', 'client_id', 'type_id', 'state_id', 'provider_id'], 'integer', 'on' => ['create', 'update']],
+            [['name', 'url', 'login', 'access', 'password'], 'string', 'on' => ['create', 'update']],
         ]);
     }
 
