@@ -3,6 +3,7 @@
 use hipanel\modules\integrations\grid\IntegrationGridView;
 use hipanel\widgets\IndexPage;
 use hipanel\widgets\Pjax;
+use yii\helpers\Html;
 
 $this->title = Yii::t('hipanel.integrations', 'Integrations');
 $this->params['breadcrumbs'][] = $this->title;
@@ -12,6 +13,11 @@ $subtitle = array_filter(Yii::$app->request->get($model->formName(), [])) ? Yii:
 
 <?php Pjax::begin(array_merge(Yii::$app->params['pjax'], ['enablePushState' => true])) ?>
     <?php $page = IndexPage::begin(compact('model', 'dataProvider')) ?>
+
+        <?php $page->beginContent('main-actions') ?>
+            <?= Html::a(Yii::t('hipanel', 'Create'), 'create', ['class' => 'btn btn-sm btn-success']) ?>
+        <?php $page->endContent() ?>
+
         <?php $page->beginContent('table') ?>
             <?php $page->beginBulkForm() ?>
                 <?= IntegrationGridView::widget([
