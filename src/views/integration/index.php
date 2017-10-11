@@ -3,6 +3,7 @@
 use hipanel\modules\integrations\grid\IntegrationGridView;
 use hipanel\widgets\IndexPage;
 use hipanel\widgets\Pjax;
+use yii\bootstrap\Modal;
 use yii\helpers\Html;
 
 $this->title = Yii::t('hipanel.integrations', 'Integrations');
@@ -15,7 +16,12 @@ $subtitle = array_filter(Yii::$app->request->get($model->formName(), [])) ? Yii:
     <?php $page = IndexPage::begin(compact('model', 'dataProvider')) ?>
 
         <?php $page->beginContent('main-actions') ?>
-            <?= Html::a(Yii::t('hipanel', 'Create'), 'create', ['class' => 'btn btn-sm btn-success']) ?>
+            <?php Modal::begin([
+                'header' => Html::tag('h4', Yii::t('hipanel.integrations', 'Select provider'), ['class' => 'modal-title']),
+                'toggleButton' => ['label' => Yii::t('hipanel', 'Create'), 'class' => 'btn btn-sm btn-success', 'tag' => 'a'],
+            ]) ?>
+                <?= $this->render('_providers', compact('providers')) ?>
+            <?php Modal::end() ?>
         <?php $page->endContent() ?>
 
         <?php $page->beginContent('table') ?>
@@ -29,6 +35,7 @@ $subtitle = array_filter(Yii::$app->request->get($model->formName(), [])) ? Yii:
                         'actions',
                         'name',
                         'provider',
+                        'client',
                         'state',
                     ],
                 ]) ?>

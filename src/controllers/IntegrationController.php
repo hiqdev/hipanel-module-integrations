@@ -15,6 +15,11 @@ class IntegrationController extends \hipanel\base\CrudController
         return [
             'index' => [
                 'class' => IndexAction::class,
+                'data' => function ($action) {
+                    return [
+                        'providers' => $action->controller->getProviders(),
+                    ];
+                },
             ],
             'view' => [
                 'class' => ViewAction::class,
@@ -42,6 +47,6 @@ class IntegrationController extends \hipanel\base\CrudController
 
     public function getProviders()
     {
-        return [];
+        return range(1, 7);
     }
 }
