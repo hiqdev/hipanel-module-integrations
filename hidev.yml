@@ -4,12 +4,14 @@ package:
     title:          Integrations management plugin for HiPanel
     headline:       HiPanel Integrations
     keywords:       integrations, hipanel, plugin
-    namespace:      hipanel\modules\integrations
     description:    |
         [![Logo](https://raw.githubusercontent.com/hiqdev/hipanel-core/master/docs/logo.png)](https://hipanel.com/)
 
-        [HiPanel] is next generation billing and control panel for hosting, domains and more.
+        [HiPanel] is the next generation billing and control panel for hosting, domains and more.
 
-        This package provides management of integrations for HiPanel.
+        This package provides management of integrations for HiPanel:
+
+        - providers
+        - integrations
 
         [HiPanel]: https://hipanel.com/
