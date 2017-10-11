@@ -36,7 +36,7 @@ $subtitle = array_filter(Yii::$app->request->get($model->formName(), [])) ? Yii:
                         'checkbox',
                         'actions',
                         'name',
-                        'provider',
+                        'provider_like',
                         'client',
                         'state',
                     ],
