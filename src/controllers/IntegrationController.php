@@ -26,6 +26,7 @@ class IntegrationController extends \hipanel\base\CrudController
                 'data' => function ($action) {
                     return [
                         'providers' => $action->controller->getProviders(),
+                        'states' => $action->controller->getStates(),
                     ];
                 },
             ],
@@ -56,5 +57,10 @@ class IntegrationController extends \hipanel\base\CrudController
     public function getProviders()
     {
         return range(1, 7);
+    }
+
+    public function getStates()
+    {
+        return $this->getRefs('state,access', 'hipanel');
     }
 }

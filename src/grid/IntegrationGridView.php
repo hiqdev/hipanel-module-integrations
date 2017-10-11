@@ -11,7 +11,9 @@
 namespace hipanel\modules\integrations\grid;
 
 use hipanel\grid\MainColumn;
+use hipanel\grid\RefColumn;
 use hipanel\modules\integrations\menus\IntegrationActionsMenu;
+use hipanel\widgets\State;
 use hiqdev\yii2\menus\grid\MenuColumn;
 
 class IntegrationGridView extends \hipanel\grid\BoxedGridView
@@ -23,6 +25,18 @@ class IntegrationGridView extends \hipanel\grid\BoxedGridView
                 'class' => MainColumn::class,
             ],
             'state' => [
+                'class' => RefColumn::class,
+                'gtype' => 'state,access',
+                'format' => 'html',
+                'value' => function ($model) {
+                    return State::widget([
+                        'model' => $model,
+                        'values' => [
+                            'info' => ['ok'],
+                            'warning' => ['disabled']
+                        ],
+                    ]);
+                }
             ],
             'actions' => [
                 'class' => MenuColumn::class,

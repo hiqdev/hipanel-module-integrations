@@ -15,6 +15,8 @@ $subtitle = array_filter(Yii::$app->request->get($model->formName(), [])) ? Yii:
 <?php Pjax::begin(array_merge(Yii::$app->params['pjax'], ['enablePushState' => true])) ?>
     <?php $page = IndexPage::begin(compact('model', 'dataProvider')) ?>
 
+        <?php $page->setSearchFormData(compact(['states'])) ?>
+
         <?php $page->beginContent('main-actions') ?>
             <?php Modal::begin([
                 'header' => Html::tag('h4', Yii::t('hipanel.integrations', 'Select provider'), ['class' => 'modal-title']),
