@@ -2,8 +2,6 @@
 
 namespace hipanel\modules\integrations\models;
 
-use Yii;
-
 class Integration extends \hipanel\base\Model
 {
     use \hipanel\base\ModelTrait;
