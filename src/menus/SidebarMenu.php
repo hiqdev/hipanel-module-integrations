@@ -16,7 +16,7 @@ class SidebarMenu extends \hiqdev\yii2\menus\Menu
 {
     public function items()
     {
-        return [
+        return Yii::$app->user->can('manage') ? [
             'settings' => [
                 'label' => Yii::t('hipanel.integrations', 'Settings'),
                 'url' => '#',
@@ -28,6 +28,6 @@ class SidebarMenu extends \hiqdev\yii2\menus\Menu
                     ],
                 ],
             ],
-        ];
+        ] : [];
     }
 }
