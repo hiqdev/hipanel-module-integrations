@@ -1,11 +1,11 @@
 <?php
 /**
- * Hosting Plugin for HiPanel
+ * Integrations management plugin for HiPanel
  *
- * @link      https://github.com/hiqdev/hipanel-module-hosting
- * @package   hipanel-module-hosting
+ * @link      https://github.com/hiqdev/hipanel-module-integrations
+ * @package   hipanel-module-integrations
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2015-2016, HiQDev (http://hiqdev.com/)
+ * @copyright Copyright (c) 2017, HiQDev (http://hiqdev.com/)
  */
 
 namespace hipanel\modules\integrations\menus;
@@ -16,7 +16,7 @@ class SidebarMenu extends \hiqdev\yii2\menus\Menu
 {
     public function items()
     {
-        return [
+        return Yii::$app->user->can('manage') ? [
             'settings' => [
                 'label' => Yii::t('hipanel.integrations', 'Settings'),
                 'url' => '#',
@@ -28,6 +28,6 @@ class SidebarMenu extends \hiqdev\yii2\menus\Menu
                     ],
                 ],
             ],
-        ];
+        ] : [];
     }
 }

@@ -3,7 +3,6 @@
 use hipanel\modules\integrations\grid\IntegrationGridView;
 use hipanel\modules\integrations\menus\IntegrationDetailMenu;
 use hipanel\widgets\Box;
-use hipanel\widgets\ClientSellerLink;
 use yii\helpers\Html;
 
 $this->title = Html::encode($model->name);
@@ -45,7 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'provider',
                         'url:url',
                         'login',
-                        'access'
+                        'access',
                     ],
                 ]) ?>
             </div>
