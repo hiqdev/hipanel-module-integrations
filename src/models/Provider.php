@@ -25,8 +25,4 @@ class Provider extends \hipanel\base\Model
         return array_merge(parent::attributeLabels(), []);
     }
 
-    public function getProvider()
-    {
-        return $this->hasOne(Provider::class, ['id' => 'provider_id']);
-    }
 }
