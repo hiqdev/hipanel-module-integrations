@@ -11,4 +11,5 @@
 return [
     'Settings' => 'Настройки',
     'Integrations' => 'Интеграции',
+    'Provider' => 'Провайдер',
 ];

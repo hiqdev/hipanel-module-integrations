@@ -10,6 +10,8 @@
 
 namespace hipanel\modules\integrations\models;
 
+use Yii;
+
 class Integration extends \hipanel\base\Model
 {
     use \hipanel\base\ModelTrait;
@@ -34,7 +36,10 @@ class Integration extends \hipanel\base\Model
      */
     public function attributeLabels()
     {
-        return array_merge(parent::attributeLabels(), []);
+        return array_merge(parent::attributeLabels(), [
+            'provider' => Yii::t('hipanel.integrations', 'Provider'),
+            'provider_like' => Yii::t('hipanel.integrations', 'Provider')
+        ]);
     }
 
     public function getProvider()
