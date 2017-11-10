@@ -20,7 +20,7 @@ class IntegrationController extends \hipanel\base\CrudController
 {
     public function actions()
     {
-        return [
+        return array_merge(parent::actions(), [
             'index' => [
                 'class' => IndexAction::class,
                 'data' => function ($action) {
@@ -51,7 +51,7 @@ class IntegrationController extends \hipanel\base\CrudController
                     ];
                 },
             ],
-        ];
+        ]);
     }
 
     public function getProviders()

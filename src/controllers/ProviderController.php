@@ -9,7 +9,7 @@ class ProviderController extends \hipanel\base\CrudController
 {
     public function actions()
     {
-        return [
+        return array_merge(parent::actions(), [
             'get-providers' => [
                 'class' => ComboSearchAction::class,
                 'on beforeSave' => function ($event) {
@@ -18,6 +18,6 @@ class ProviderController extends \hipanel\base\CrudController
                     $action->dataProvider->query->action('Search');
                 },
             ],
-        ];
+        ]);
     }
 }
