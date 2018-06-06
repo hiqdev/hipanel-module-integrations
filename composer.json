@@ -48,7 +48,8 @@
     },
     "autoload": {
         "psr-4": {
-            "hipanel\\modules\\integrations\\": "src"
+            "hipanel\\modules\\integrations\\": "src",
+            "hipanel\\modules\\integrations\\tests\\": "tests"
         }
     },
     "extra": {
