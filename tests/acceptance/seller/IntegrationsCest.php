@@ -27,17 +27,17 @@ class IntegrationsCest
         $I->needPage(Url::to('@integration'));
         $I->see('Integrations', 'h1');
         $I->see('Create', 'a');
-        $this->ensureICanSeeAdvancedSearchBox();
+        $this->ensureICanSeeAdvancedSearchBox($I);
         $this->ensureICanSeeBulkDomainSearchBox();
     }
 
-    private function ensureICanSeeAdvancedSearchBox()
+    private function ensureICanSeeAdvancedSearchBox(Seller $I)
     {
         $this->index->containsFilters([
-            new Input('Name'),
-            new Select2('Provider'),
-            new Select2('Client'),
-            (new Dropdown('integrationsearch-state'))->withItems([
+            Input::asAdvancedSearch($I, 'Name'),
+            Select2::asAdvancedSearch($I, 'Provider'),
+            Select2::asAdvancedSearch($I, 'Client'),
+            (Dropdown::asAdvancedSearch($I, 'Status'))->withItems([
                 'Ok',
                 'Disabled',
             ]),
