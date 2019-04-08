@@ -2,9 +2,12 @@
 
 namespace hipanel\modules\integrations\models;
 
-class Provider extends \hipanel\base\Model
+use hipanel\base\Model;
+use hipanel\base\ModelTrait;
+
+class Provider extends Model
 {
-    use \hipanel\base\ModelTrait;
+    use ModelTrait;
 
     /**
      * {@inheritdoc}
@@ -13,7 +16,7 @@ class Provider extends \hipanel\base\Model
     {
         return array_merge(parent::rules(), [
             [['id', 'type_id', 'state_id'], 'integer'],
-            [['name', 'label'], 'string'],
+            [['name', 'label', 'url', 'login', 'password'], 'string'],
         ]);
     }
 
@@ -24,5 +27,4 @@ class Provider extends \hipanel\base\Model
     {
         return array_merge(parent::attributeLabels(), []);
     }
-
 }

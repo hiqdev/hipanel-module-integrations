@@ -22,6 +22,6 @@ use hipanel\modules\integrations\widgets\combo\ProviderCombo;
     </div>
 
     <div class="col-md-4 col-sm-6 col-xs-12">
-        <?= $search->field('state')->dropDownList($states, ['prompt' => '--']) ?>
+        <?= $search->field('state')->dropDownList($search->model->states, ['prompt' => '--']) ?>
     </div>
 <?php endif ?>

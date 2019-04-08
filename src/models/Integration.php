@@ -10,11 +10,18 @@
 
 namespace hipanel\modules\integrations\models;
 
+use hipanel\base\Model;
+use hipanel\base\ModelTrait;
+use hipanel\models\Ref;
 use Yii;
 
-class Integration extends \hipanel\base\Model
+class Integration extends Model
 {
-    use \hipanel\base\ModelTrait;
+    use ModelTrait;
+
+    public const ACCESS_TYPE_PAYMENT = 'payment';
+    public const ACCESS_TYPE_DOMAIN = 'domain';
+    public const ACCESS_TYPE_CERTIFICATE = 'certificate';
 
     /**
      * {@inheritdoc}
@@ -23,7 +30,7 @@ class Integration extends \hipanel\base\Model
     {
         return array_merge(parent::rules(), [
             [['id', 'client_id', 'type_id', 'state_id'], 'integer'],
-            [['client', 'state', 'provider', 'provider_like', 'name', 'url', 'login', 'access', 'password'], 'string'],
+            [['client', 'state', 'provider', 'provider_like', 'name', 'url', 'login', 'access', 'password', 'type'], 'string'],
 
             // Create / Update
             [['id', 'client_id', 'type_id', 'state_id', 'provider_id'], 'integer', 'on' => ['create', 'update']],
@@ -45,5 +52,15 @@ class Integration extends \hipanel\base\Model
     public function getProvider()
     {
         return $this->hasOne(Provider::class, ['id' => 'provider_id']);
+    }
+
+    public function getTypes()
+    {
+        return Ref::getList('type,api');
+    }
+
+    public function getStates()
+    {
+        return Ref::getList('state,access');
     }
 }

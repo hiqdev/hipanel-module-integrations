@@ -10,13 +10,14 @@
 
 namespace hipanel\modules\integrations\grid;
 
+use hipanel\grid\BoxedGridView;
 use hipanel\grid\MainColumn;
 use hipanel\grid\RefColumn;
 use hipanel\modules\integrations\menus\IntegrationActionsMenu;
 use hipanel\widgets\State;
 use hiqdev\yii2\menus\grid\MenuColumn;
 
-class IntegrationGridView extends \hipanel\grid\BoxedGridView
+class IntegrationGridView extends BoxedGridView
 {
     public function columns()
     {
