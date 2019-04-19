@@ -8,7 +8,7 @@ return [
     'certificate,certum' => 'Certum',
     'certificate,gogetssl' => 'GoGetSSL',
 
-    'domain' => '',
+    'domain' => 'Domain',
     'domain,directi' => 'Directi',
     'domain,dummy' => 'Dummy',
     'domain,enom' => 'Enom',

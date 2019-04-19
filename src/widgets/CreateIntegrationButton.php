@@ -86,9 +86,9 @@ class CreateIntegrationButton extends Widget
 
         foreach ($this->allowedTypes as $type => $label) {
             $variants[$type] = [
-                'label' => Yii::t('hipanel.integrations', 'Create {label} access', ['label' => strtolower($label)]),
+                'label' => Yii::t('hipanel.integrations', 'Create {label} access', ['label' => Yii::t('hipanel.integrations', strtolower($label))]),
                 'icon' => $map[$type]['icon'],
-                'visible' => true, // Yii::getAlias('@finance', false)
+                'visible' => true,
             ];
         }
 

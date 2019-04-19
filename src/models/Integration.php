@@ -39,7 +39,8 @@ class Integration extends Model
     {
         return array_merge(parent::attributeLabels(), [
             'provider_name' => Yii::t('hipanel.integrations', 'Provider'),
-            'provider_label' => Yii::t('hipanel.integrations', 'Provider')
+            'provider_label' => Yii::t('hipanel.integrations', 'Provider'),
+            'name' => Yii::t('hipanel.integrations', 'Name'),
         ]);
     }
 

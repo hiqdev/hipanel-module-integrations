@@ -12,4 +12,11 @@ return [
     'Settings' => 'Настройки',
     'Integrations' => 'Интеграции',
     'Provider' => 'Провайдер',
+    'Name' => 'Название',
+    'Choose provider' => 'Выберите провайдера',
+    'Create {label} access' => 'Создать интеграцию с {label}',
+    'Create integration' => 'Создать интеграцию',
+    'domain registrar' => 'регистратором доменов',
+    'certificate provider' => 'поставщиком сертификатов',
+    'payment gateway' => 'платежным шлюзом',
 ];
