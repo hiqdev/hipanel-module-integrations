@@ -30,9 +30,11 @@ $subtitle = array_filter(Yii::$app->request->get($model->formName(), [])) ? Yii:
     <?php $page = IndexPage::begin(compact('model', 'dataProvider')) ?>
 
         <?php $page->beginContent('main-actions') ?>
-            <?= CreateIntegrationButton::widget([
-                'allowedTypes' => $providerTypes,
-            ]) ?>
+            <?php if (Yii::$app->user->can('integration.create')) : ?>
+                <?= CreateIntegrationButton::widget([
+                    'allowedTypes' => $providerTypes,
+                ]) ?>
+            <?php endif; ?>
         <?php $page->endContent() ?>
 
         <?php $page->beginContent('table') ?>

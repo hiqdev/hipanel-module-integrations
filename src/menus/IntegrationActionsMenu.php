@@ -32,6 +32,7 @@ class IntegrationActionsMenu extends MenuAlias
                 'label' => Yii::t('hipanel', 'Update'),
                 'icon' => 'fa-pencil',
                 'url' => $this->model->updateRoute,
+                'visible' => Yii::$app->user->can('integration.update'),
                 'linkOptions' => [
                     'data-pjax' => 0,
                 ],

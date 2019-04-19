@@ -13,6 +13,7 @@ namespace hipanel\modules\integrations\controllers;
 use hipanel\actions\IndexAction;
 use hipanel\actions\ViewAction;
 use hipanel\base\CrudController;
+use hipanel\filters\EasyAccessControl;
 use hipanel\modules\integrations\data\ProvidersDataProvider;
 use yii\base\Module;
 
@@ -22,6 +23,21 @@ class IntegrationController extends CrudController
      * @var ProvidersDataProvider
      */
     private $providersDataProvider;
+
+    public function behaviors()
+    {
+        return array_merge(parent::behaviors(), [
+            [
+                'class' => EasyAccessControl::class,
+                'actions' => [
+                    'create' => 'integration.create',
+                    'update' => 'integration.update',
+                    'delete' => 'integration.delete',
+                    '*' => 'integration.read',
+                ],
+            ],
+        ]);
+    }
 
     /**
      * IntegrationController constructor.
