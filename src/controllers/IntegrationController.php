@@ -11,28 +11,57 @@
 namespace hipanel\modules\integrations\controllers;
 
 use hipanel\actions\IndexAction;
-use hipanel\actions\SmartCreateAction;
-use hipanel\actions\SmartUpdateAction;
-use hipanel\actions\ValidateFormAction;
 use hipanel\actions\ViewAction;
 use hipanel\base\CrudController;
-use hipanel\modules\integrations\forms\CertificateForm;
-use hipanel\modules\integrations\forms\DomainForm;
-use hipanel\modules\integrations\forms\PaymentForm;
-use hipanel\modules\integrations\models\Integration;
-use hiqdev\hiart\Collection;
-use Yii;
+use hipanel\filters\EasyAccessControl;
+use hipanel\modules\integrations\data\ProvidersDataProvider;
+use yii\base\Module;
 
 class IntegrationController extends CrudController
 {
+    /**
+     * @var ProvidersDataProvider
+     */
+    private $providersDataProvider;
+
+    public function behaviors()
+    {
+        return array_merge(parent::behaviors(), [
+            [
+                'class' => EasyAccessControl::class,
+                'actions' => [
+                    'create' => 'integration.create',
+                    'update' => 'integration.update',
+                    'delete' => 'integration.delete',
+                    '*' => 'integration.read',
+                ],
+            ],
+        ]);
+    }
+
+    /**
+     * IntegrationController constructor.
+     * @param $id
+     * @param Module $module
+     * @param ProvidersDataProvider $providersDataProvider
+     * @param array $config
+     */
+    public function __construct($id, Module $module, ProvidersDataProvider $providersDataProvider, array $config = [])
+    {
+        parent::__construct($id, $module, $config);
+
+        $this->providersDataProvider = $providersDataProvider;
+    }
+
     public function actions()
     {
-        return array_merge(parent::actions(), [
+        $actions = array_merge(parent::actions(), [
             'index' => [
                 'class' => IndexAction::class,
                 'data' => function ($action) {
                     return [
                         'states' => $action->controller->getStates(),
+                        'providerTypes' => $action->controller->getProviderTypes(),
                     ];
                 },
             ],
@@ -40,6 +69,8 @@ class IntegrationController extends CrudController
                 'class' => ViewAction::class,
             ],
         ], $this->getMandatoryActions());
+
+        return $actions;
     }
 
     public function getStates()
@@ -47,60 +78,17 @@ class IntegrationController extends CrudController
         return $this->getRefs('state,access', 'hipanel');
     }
 
-    public function getSpecificFormName(): ?string
+    public function getProviderTypes(): ?array
     {
-        foreach ([
-                     Integration::ACCESS_TYPE_PAYMENT,
-                     Integration::ACCESS_TYPE_CERTIFICATE,
-                     Integration::ACCESS_TYPE_DOMAIN,
-                 ] as $accessType) {
-            if (stristr($this->action->id, $accessType)) {
-                return $accessType;
-            }
-        }
+        $types = $this->getRefs('type,provider');
 
-        return null;
+        return array_filter($types, function (string $label, string $type): bool {
+            return in_array($type, ['payment', 'certificate', 'domain'], true); // only these types are available for now
+        }, ARRAY_FILTER_USE_BOTH);
     }
 
     private function getMandatoryActions(): array
     {
-        $actions = [];
-        $map = [
-            Integration::ACCESS_TYPE_PAYMENT => PaymentForm::class,
-            Integration::ACCESS_TYPE_DOMAIN => DomainForm::class,
-            Integration::ACCESS_TYPE_CERTIFICATE => CertificateForm::class,
-        ];
-
-        foreach ($map as $type => $class) {
-            $actions['create-' . $type] = [
-                'class' => SmartCreateAction::class,
-                'view' => 'create',
-                'collection' => [
-                    'class' => Collection::class,
-                    'model' => new $class(['scenario' => 'create']),
-                    'scenario' => 'create',
-                ],
-                'success' => Yii::t('hipanel.integrations', '{type} access has been created', ['type' => ucfirst($type)]),
-            ];
-            $actions['update-' . $type] = [
-                'class' => SmartUpdateAction::class,
-                'view' => 'update',
-                'collection' => [
-                    'class' => Collection::class,
-                    'model' => new $class(['scenario' => 'update']),
-                    'scenario' => 'update',
-                ],
-                'success' => Yii::t('hipanel.integrations', '{type} access has been updated', ['type' => ucfirst($type)]),
-            ];
-            $actions["validate->{$type}-form"] = [
-                'class' => ValidateFormAction::class,
-                'collection' => [
-                    'class' => Collection::class,
-                    'model' => new $class(),
-                ],
-            ];
-        }
-
-        return $actions;
+        return $this->providersDataProvider->getProviderActions();
     }
 }

@@ -24,6 +24,10 @@ return [
                     'class' => \yii\i18n\PhpMessageSource::class,
                     'basePath' => '@hipanel/modules/integrations/messages',
                 ],
+                'hipanel.integrations.types' => [
+                    'class' => \yii\i18n\PhpMessageSource::class,
+                    'basePath' => '@hipanel/modules/integrations/messages',
+                ],
             ],
         ],
     ],

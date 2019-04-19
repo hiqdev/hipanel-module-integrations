@@ -13,15 +13,13 @@ namespace hipanel\modules\integrations\models;
 use hipanel\base\Model;
 use hipanel\base\ModelTrait;
 use hipanel\models\Ref;
+use hipanel\modules\integrations\data\ProvidersDataProvider;
 use Yii;
+use yii\db\ActiveQuery;
 
 class Integration extends Model
 {
     use ModelTrait;
-
-    public const ACCESS_TYPE_PAYMENT = 'payment';
-    public const ACCESS_TYPE_DOMAIN = 'domain';
-    public const ACCESS_TYPE_CERTIFICATE = 'certificate';
 
     /**
      * {@inheritdoc}
@@ -29,12 +27,8 @@ class Integration extends Model
     public function rules()
     {
         return array_merge(parent::rules(), [
-            [['id', 'client_id', 'type_id', 'state_id'], 'integer'],
-            [['client', 'state', 'provider', 'provider_like', 'name', 'url', 'login', 'access', 'password', 'type'], 'string'],
-
-            // Create / Update
-            [['id', 'client_id', 'type_id', 'state_id', 'provider_id'], 'integer', 'on' => ['create', 'update']],
-            [['name', 'url', 'login', 'password'], 'string', 'on' => ['create', 'update']],
+            [['id', 'client_id', 'type_id', 'state_id', 'provider_id'], 'integer'],
+            [['client', 'state', 'provider_name', 'provider_label', 'name', 'url', 'login', 'access', 'password', 'type', 'type_label', 'state_label'], 'string'],
         ]);
     }
 
@@ -44,23 +38,60 @@ class Integration extends Model
     public function attributeLabels()
     {
         return array_merge(parent::attributeLabels(), [
-            'provider' => Yii::t('hipanel.integrations', 'Provider'),
-            'provider_like' => Yii::t('hipanel.integrations', 'Provider')
+            'provider_name' => Yii::t('hipanel.integrations', 'Provider'),
+            'provider_label' => Yii::t('hipanel.integrations', 'Provider'),
+            'name' => Yii::t('hipanel.integrations', 'Name'),
         ]);
     }
 
     public function getProvider()
     {
-        return $this->hasOne(Provider::class, ['id' => 'provider_id']);
+        return new class($this) extends ActiveQuery
+        {
+            public function one($db = null)
+            {
+                /** @var ProvidersDataProvider $pdp */
+                $pdp = Yii::$container->get(ProvidersDataProvider::class);
+
+                $provider = reset(array_filter($pdp->getProviders(), function ($provider, $key) {
+                    return $provider->id === $this->modelClass->provider_id;
+                }, ARRAY_FILTER_USE_BOTH));
+                if ($provider) {
+                    $provider->trigger(Provider::EVENT_AFTER_FIND);
+                }
+
+                return $provider;
+            }
+        };
     }
 
-    public function getTypes()
+    public function getTypes(): ?array
     {
         return Ref::getList('type,api');
     }
 
-    public function getStates()
+    public function getStates(): ?array
     {
         return Ref::getList('state,access');
+    }
+
+    public function getCreateRoute(): array
+    {
+        return $this->buildUrl('create', $this);
+    }
+
+    public function getUpdateRoute(): array
+    {
+        return $this->buildUrl('update', $this);
+    }
+
+    public static function buildUrl(string $scenario, Integration $integration): array
+    {
+        return ["@integration/{$scenario}-{$integration->provider->name}", 'id' => $integration->id];
+    }
+
+    public function getPageTitle(): string
+    {
+        return $this->access;
     }
 }

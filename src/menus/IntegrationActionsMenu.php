@@ -10,9 +10,10 @@
 
 namespace hipanel\modules\integrations\menus;
 
+use hiqdev\yii2\menus\Menu as MenuAlias;
 use Yii;
 
-class IntegrationActionsMenu extends \hiqdev\yii2\menus\Menu
+class IntegrationActionsMenu extends MenuAlias
 {
     public $model;
 
@@ -30,7 +31,8 @@ class IntegrationActionsMenu extends \hiqdev\yii2\menus\Menu
             'update' => [
                 'label' => Yii::t('hipanel', 'Update'),
                 'icon' => 'fa-pencil',
-                'url' => ['@integration/update', 'id' => $this->model->id],
+                'url' => $this->model->updateRoute,
+                'visible' => Yii::$app->user->can('integration.update'),
                 'linkOptions' => [
                     'data-pjax' => 0,
                 ],

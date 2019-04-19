@@ -11,8 +11,27 @@
 namespace hipanel\modules\integrations\models;
 
 use hipanel\base\SearchModelTrait;
+use Yii;
+use yii\helpers\ArrayHelper;
 
 class IntegrationSearch extends Integration
 {
-    use SearchModelTrait;
+    use SearchModelTrait {
+        searchAttributes as defaultSearchAttributes;
+    }
+
+    public function searchAttributes()
+    {
+        return ArrayHelper::merge($this->defaultSearchAttributes(), [
+            'provider_like',
+        ]);
+    }
+
+    public function attributeLabels()
+    {
+        return array_merge(parent::attributeLabels(), [
+            'provider_lable_ilike' => Yii::t('hipanel', 'Provider'),
+            'name_ilike' => Yii::t('hipanel.integrations', 'Integration name'),
+        ]);
+    }
 }
