@@ -4,6 +4,7 @@ namespace hipanel\modules\integrations\widgets;
 
 use hipanel\helpers\Url;
 use hipanel\modules\integrations\data\ProvidersDataProvider;
+use hipanel\modules\integrations\models\Provider;
 use hiqdev\paymenticons\yii2\PaymentIconsAsset;
 use Yii;
 use yii\base\Widget;
@@ -43,7 +44,7 @@ class CreateIntegrationButton extends Widget
                     'options' => ['class' => 'provider-variants'],
                     'itemOptions' => ['class' => 'provider-variant'],
                     'dataProvider' => (new ArrayDataProvider(['allModels' => $providers, 'pagination' => false])),
-                    'itemView' => function ($provider, $key, $index, $widget) {
+                    'itemView' => function (Provider $provider, int $key, int $index, ListView $widget): string {
                         $html = '';
                         $html .= Html::beginTag('a', ['href' => Url::to('@integration/create-' . $provider->name)]);
                         if ($provider->hasImage()) {

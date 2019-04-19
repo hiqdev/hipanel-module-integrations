@@ -78,7 +78,7 @@ class ProvidersDataProvider
                 'data' => function (Action $action, array $data) use ($class) {
                     $result = [];
                     foreach ($data['models'] as $model) {
-                        $result['models'][] = call_user_func([$class, 'fromIntegration'], $model);
+                        $result['models'][] = $class::fromIntegration($model);
                     }
                     $result['model'] = reset($result['models']);
 

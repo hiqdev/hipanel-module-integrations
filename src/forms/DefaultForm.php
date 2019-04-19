@@ -7,6 +7,7 @@ use hipanel\modules\integrations\models\Integration;
 use hipanel\modules\integrations\widgets\IntegrationFormBuilder;
 use Yii;
 use yii\base\Model;
+use yii\db\ActiveQuery;
 use yii\helpers\Json;
 
 class DefaultForm extends Model implements IntegrationFormInterface
@@ -29,7 +30,7 @@ class DefaultForm extends Model implements IntegrationFormInterface
 
     public $data;
 
-    public static function fromIntegration(Integration $integration, string $scenario = 'update')
+    public static function fromIntegration(Integration $integration, string $scenario = 'update'): self
     {
         $form = new self(['scenario' => $scenario]);
         foreach ($integration as $attribute => $value) {
@@ -80,12 +81,12 @@ class DefaultForm extends Model implements IntegrationFormInterface
         $this->prepareDefaultFields();
     }
 
-    public function getIsNewRecord()
+    public function getIsNewRecord(): bool
     {
         return $this->id === null;
     }
 
-    public function getPrimaryKey()
+    public function getPrimaryKey(): int
     {
         return $this->id;
     }
@@ -159,7 +160,7 @@ class DefaultForm extends Model implements IntegrationFormInterface
             [['name'], 'required', 'on' => ['create', 'update']],
             [['name'], 'unique', 'targetAttribute' => ['client_id', 'name'],
                 'targetClass' => Integration::class,
-                'filter' => function ($query) {
+                'filter' => function (ActiveQuery $query) {
                     $query->andWhere(['ne', 'id', $this->id]);
                 },
                 'message' => Yii::t('hipanel.integrations', 'Fields Client and Name are not unique'),
@@ -197,7 +198,7 @@ class DefaultForm extends Model implements IntegrationFormInterface
             'create' => 'create',
             'update' => 'update',
         ];
-        $scenario = isset($map[$defaultScenario]) ? $map[$defaultScenario] : $defaultScenario;
+        $scenario = $map[$defaultScenario] ?? $defaultScenario;
 
         return (new Integration())->batchQuery($scenario, $data, $options);
     }

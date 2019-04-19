@@ -56,8 +56,9 @@ class IntegrationGridView extends BoxedGridView
                 },
                 'sortAttribute' => 'type',
                 'format' => 'raw',
-                'value' => function (Integration $model) {
-                    return IntegrationType::widget([ 'model' => $model,
+                'value' => function (Integration $model): string {
+                    return IntegrationType::widget([
+                        'model' => $model,
                         'field' => 'type',
                         'labelField' => 'type_label',
                     ]);

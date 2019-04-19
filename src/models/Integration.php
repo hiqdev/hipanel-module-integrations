@@ -90,7 +90,7 @@ class Integration extends Model
         return ["@integration/{$scenario}-{$integration->provider->name}", 'id' => $integration->id];
     }
 
-    public function getPageTitle()
+    public function getPageTitle(): string
     {
         return $this->access;
     }

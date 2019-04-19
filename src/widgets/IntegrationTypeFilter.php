@@ -16,7 +16,7 @@ use yii\helpers\ArrayHelper;
 
 class IntegrationTypeFilter extends RefFilter
 {
-    protected function getRefs()
+    protected function getRefs(): array
     {
         $options = ['select' => 'full', 'orderby' => 'name_asc', 'with_hierarchy' => true];
         $types = Ref::findCached('type,api', 'hipanel.integrations.types', $options);
@@ -31,7 +31,7 @@ class IntegrationTypeFilter extends RefFilter
      * @param string $prefix
      * @return array
      */
-    private function prefixBillTypes($types, $prefix = '-- ')
+    private function prefixBillTypes($types, $prefix = '-- '): array
     {
         foreach ($types as $key => $title) {
             if (count(explode(',', $key)) > 1) {

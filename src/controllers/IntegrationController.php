@@ -82,8 +82,8 @@ class IntegrationController extends CrudController
     {
         $types = $this->getRefs('type,provider');
 
-        return array_filter($types, function ($label, $type) {
-            return in_array($type, ['payment', 'certificate', 'domain']); // only this types available for now
+        return array_filter($types, function (string $label, string $type): bool {
+            return in_array($type, ['payment', 'certificate', 'domain'], true); // only these types are available for now
         }, ARRAY_FILTER_USE_BOTH);
     }
 

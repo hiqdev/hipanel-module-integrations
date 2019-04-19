@@ -54,7 +54,7 @@ class IntegrationFormBuilder extends ActiveForm
      * @return ActiveField
      * @throws InvalidConfigException
      */
-    public function renderField(Model $model, $attribute, array $settings = []): ActiveField
+    public function renderField(Model $model, string $attribute, array $settings = []): ActiveField
     {
         $fieldOptions = ArrayHelper::getValue($settings, 'fieldOptions', []);
         $field = $this->field($model, $attribute, $fieldOptions);
