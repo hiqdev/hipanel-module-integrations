@@ -151,7 +151,7 @@ class DefaultForm extends Model implements IntegrationFormInterface
 
 
 
-    public function rules()
+    public function rules(): array
     {
         $rules = [
             [['id', 'provider_id', 'type_id', 'client_id'], 'integer'],
@@ -173,7 +173,7 @@ class DefaultForm extends Model implements IntegrationFormInterface
         return $rules;
     }
 
-    public function attributeLabels()
+    public function attributeLabels(): array
     {
         return [
             'name' => Yii::t('hipanel.integrations', 'Name'),
