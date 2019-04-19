@@ -14,6 +14,9 @@ use hipanel\grid\BoxedGridView;
 use hipanel\grid\MainColumn;
 use hipanel\grid\RefColumn;
 use hipanel\modules\integrations\menus\IntegrationActionsMenu;
+use hipanel\modules\integrations\models\Integration;
+use hipanel\modules\integrations\widgets\IntegrationType;
+use hipanel\modules\integrations\widgets\IntegrationTypeFilter;
 use hipanel\widgets\State;
 use hiqdev\yii2\menus\grid\MenuColumn;
 
@@ -24,6 +27,7 @@ class IntegrationGridView extends BoxedGridView
         return array_merge(parent::columns(), [
             'name' => [
                 'class' => MainColumn::class,
+                'filterAttribute' => 'name_ilike',
             ],
             'state' => [
                 'class' => RefColumn::class,
@@ -38,6 +42,26 @@ class IntegrationGridView extends BoxedGridView
                         ],
                     ]);
                 }
+            ],
+            'provider_label' => [
+                'filterAttribute' => 'provider_name_ilike',
+            ],
+            'type' => [
+                'filter' => function ($column, $filterModel) {
+                    return IntegrationTypeFilter::widget([
+                        'options' => ['class' => 'form-control text-right', 'style' => 'max-width: 12em'],
+                        'attribute' => 'type',
+                        'model' => $filterModel,
+                    ]);
+                },
+                'sortAttribute' => 'type',
+                'format' => 'raw',
+                'value' => function (Integration $model) {
+                    return IntegrationType::widget([ 'model' => $model,
+                        'field' => 'type',
+                        'labelField' => 'type_label',
+                    ]);
+                },
             ],
             'actions' => [
                 'class' => MenuColumn::class,

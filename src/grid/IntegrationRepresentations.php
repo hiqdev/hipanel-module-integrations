@@ -16,7 +16,7 @@ class IntegrationRepresentations extends RepresentationCollection
                     'checkbox',
                     'actions',
                     'name',
-                    'provider_like',
+                    'provider_label',
                     'client',
                     'type',
                     'state',

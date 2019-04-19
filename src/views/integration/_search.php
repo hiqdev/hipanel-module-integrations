@@ -9,11 +9,7 @@ use hipanel\modules\integrations\widgets\combo\ProviderCombo;
 ?>
 
 <div class="col-md-4 col-sm-6 col-xs-12">
-    <?= $search->field('name') ?>
-</div>
-
-<div class="col-md-4 col-sm-6 col-xs-12">
-    <?= $search->field('provider')->widget(ProviderCombo::class) ?>
+    <?= $search->field('name_ilike') ?>
 </div>
 
 <?php if (Yii::$app->user->can('support')) : ?>
