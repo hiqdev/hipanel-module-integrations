@@ -203,7 +203,6 @@ class IntegrationsCest
     /**
      * @param Seller $I
      * @param array $formData
-     * @return string ID of item
      * @throws \Codeception\Exception\ModuleException
      */
     private function fillAndSubmitFormByProviderName(Seller $I, array $formData): void
