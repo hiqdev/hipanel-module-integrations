@@ -5,9 +5,9 @@ namespace hipanel\modules\integrations\forms;
 use hipanel\modules\client\widgets\combo\ClientCombo;
 use hipanel\modules\integrations\models\Integration;
 use hipanel\modules\integrations\widgets\IntegrationFormBuilder;
+use hiqdev\hiart\ActiveQuery;
 use Yii;
 use yii\base\Model;
-use yii\db\ActiveQuery;
 use yii\helpers\Json;
 
 class DefaultForm extends Model implements IntegrationFormInterface
@@ -22,6 +22,8 @@ class DefaultForm extends Model implements IntegrationFormInterface
 
     public $password;
 
+    public $provider_name;
+
     public $provider_id;
 
     public $client_id;
@@ -35,11 +37,12 @@ class DefaultForm extends Model implements IntegrationFormInterface
         $form = new self(['scenario' => $scenario]);
         foreach ($integration as $attribute => $value) {
             if ($form->hasProperty($attribute)) {
-                $form->setAttributes([$attribute => $value]);
+                $form->{$attribute} = $value;
             }
         }
         // setting form fields from data
         $form->data = $integration->provider->data;
+        $form->provider_name = $integration->provider->name;
 
         return $form;
     }
@@ -86,7 +89,7 @@ class DefaultForm extends Model implements IntegrationFormInterface
         return $this->id === null;
     }
 
-    public function getPrimaryKey(): int
+    public function getPrimaryKey(): ?int
     {
         return $this->id;
     }
@@ -101,6 +104,7 @@ class DefaultForm extends Model implements IntegrationFormInterface
         $config = [];
         if ($this->isNewRecord) {
             $this->client_id = Yii::$app->user->identity->id;
+            $this->name = $this->provider_name;
         } else {
             $config['id'] = [
                 'type' => IntegrationFormBuilder::INPUT_HIDDEN,

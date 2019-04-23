@@ -55,7 +55,7 @@ class ProvidersDataProvider
                         'scenario' => 'create',
                         'data' => $provider->data,
                         'provider_id' => $provider->id,
-                        'name' => $provider->name,
+                        'provider_name' => $provider->name,
                     ]),
                     'scenario' => 'create',
                 ],
@@ -66,12 +66,11 @@ class ProvidersDataProvider
                 'view' => 'update',
                 'collection' => [
                     'class' => Collection::class,
-
                     'model' => new $class([
                         'scenario' => 'update',
                         'data' => $provider->data,
                         'provider_id' => $provider->id,
-                        'name' => $provider->name,
+                        'provider_name' => $provider->name,
                     ]),
                     'scenario' => 'update',
                 ],

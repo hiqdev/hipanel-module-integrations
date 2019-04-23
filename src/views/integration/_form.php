@@ -8,7 +8,7 @@ use yii\helpers\Url;
 
 <?php $form = IntegrationFormBuilder::begin([
     'id' => 'integration-form',
-    'validationUrl' => Url::toRoute(["validate-{$model->name}-form", 'scenario' => $model->scenario]),
+    'validationUrl' => Url::toRoute(["validate-{$model->provider_name}-form", 'scenario' => $model->scenario]),
     'enableAjaxValidation' => true,
 ]) ?>
 
