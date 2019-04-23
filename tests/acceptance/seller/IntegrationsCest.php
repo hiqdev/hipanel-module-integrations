@@ -11,11 +11,11 @@ use hipanel\tests\_support\Step\Acceptance\Seller;
 
 class IntegrationsCest
 {
-    public static $PROVIDER_TYPE_DOMAIN = 'domain';
+    const PROVIDER_TYPE_DOMAIN = 'domain';
 
-    public static $PROVIDER_TYPE_CERTIFICATE = 'certificate';
+    const PROVIDER_TYPE_CERTIFICATE = 'certificate';
 
-    public static $PROVIDER_TYPE_PAYMENT = 'payment';
+    const PROVIDER_TYPE_PAYMENT = 'payment';
 
     private $createFormData = [
         'directi' => [
@@ -75,9 +75,9 @@ class IntegrationsCest
     public function ensureICanSeeVariantsOfCreateIntegrations(Seller $I): void
     {
         $variants = [
-            self::$PROVIDER_TYPE_DOMAIN,
-            self::$PROVIDER_TYPE_CERTIFICATE,
-            self::$PROVIDER_TYPE_PAYMENT,
+            self::PROVIDER_TYPE_DOMAIN,
+            self::PROVIDER_TYPE_CERTIFICATE,
+            self::PROVIDER_TYPE_PAYMENT,
         ];
 
         $I->amOnPage(Url::to('@integration'));
@@ -92,9 +92,9 @@ class IntegrationsCest
     public function ensureICanCRUDOperations(Seller $I): void
     {
         foreach ([
-            self::$PROVIDER_TYPE_DOMAIN => 'directi',
-            self::$PROVIDER_TYPE_CERTIFICATE => 'certum',
-            self::$PROVIDER_TYPE_PAYMENT => 'paypal',
+            self::PROVIDER_TYPE_DOMAIN => 'directi',
+            self::PROVIDER_TYPE_CERTIFICATE => 'certum',
+            self::PROVIDER_TYPE_PAYMENT => 'paypal',
                  ] as $type => $provider) {
             $I->amOnPage(Url::to('@integration/index'));
             $this->openModalByProviderType($I, $type);
@@ -111,11 +111,11 @@ class IntegrationsCest
     public function ensureICanNotCreateTwoItemsWithTheSameNameAndClient(Seller $I)
     {
         $I->amOnPage(Url::to('@integration/index'));
-        $this->openModalByProviderType($I, self::$PROVIDER_TYPE_CERTIFICATE);
+        $this->openModalByProviderType($I, self::PROVIDER_TYPE_CERTIFICATE);
         $this->createByProviderName($I, 'paypal');
         $firstItemId = $this->checkByProviderName($I, 'paypal');
         $I->amOnPage(Url::to('@integration/index'));
-        $this->openModalByProviderType($I, self::$PROVIDER_TYPE_CERTIFICATE);
+        $this->openModalByProviderType($I, self::PROVIDER_TYPE_CERTIFICATE);
         $this->createByProviderName($I, 'paypal');
         $I->waitForText('Fields Client and Name are not unique');
         $this->deleteItem($I, $firstItemId);
