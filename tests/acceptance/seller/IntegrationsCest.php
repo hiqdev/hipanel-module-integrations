@@ -104,7 +104,6 @@ class IntegrationsCest
             $I->seeInTitle('Update');
             $this->updateByProviderName($I, $provider);
             $this->deleteItem($I, $id);
-            $I->wait(2); // coffee break
         }
     }
 
