@@ -113,7 +113,6 @@ class IntegrationsCest
         $I->amOnPage(Url::to('@integration/index'));
         $this->openModalByProviderType($I, self::$PROVIDER_TYPE_CERTIFICATE);
         $this->createByProviderName($I, 'paypal');
-        $this->checkByProviderName($I, 'paypal');
         $firstItemId = $this->checkByProviderName($I, 'paypal');
         $I->amOnPage(Url::to('@integration/index'));
         $this->openModalByProviderType($I, self::$PROVIDER_TYPE_CERTIFICATE);
