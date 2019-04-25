@@ -2,11 +2,11 @@
 
 namespace hipanel\modules\integrations\tests\acceptance\seller;
 
-use hipanel\helpers\Url;
-use hipanel\tests\_support\Page\IndexPage;
-use hipanel\tests\_support\Page\Widget\Input\Dropdown;
-use hipanel\tests\_support\Page\Widget\Input\Input;
-use hipanel\tests\_support\Page\Widget\Input\Select2;
+use hipanel\modules\integrations\tests\_support\Page\Integration\Create;
+use hipanel\modules\integrations\tests\_support\Page\Integration\Delete;
+use hipanel\modules\integrations\tests\_support\Page\Integration\Index;
+use hipanel\modules\integrations\tests\_support\Page\Integration\Update;
+use hipanel\modules\integrations\tests\_support\Page\Integration\View;
 use hipanel\tests\_support\Step\Acceptance\Seller;
 
 class IntegrationsCest
@@ -52,171 +52,81 @@ class IntegrationsCest
         ]
     ];
 
-    /**
-     * @var IndexPage
-     */
-    private $index;
-
-    public function _before(Seller $I)
+    public function ensureIntegrationsPageWorks(Seller $I): void
     {
-        $this->index = new IndexPage($I);
+        $variants = array_keys($this->getVariants());
+        $indexPage = new Index($I);
+        $indexPage->ensureIndexPageWorks();
+        $indexPage->ensureICanSeeAdvancedSearchBox();
+        $indexPage->ensureICanSeeColumns();
+        $indexPage->ensureICanSeeVariantsOfCreateIntegrations($variants);
     }
 
-    public function ensureIndexPageWorks(Seller $I): void
+    public function ensureICanCreateIntegrations(Seller $I): void
     {
-        $I->login();
-        $I->needPage(Url::to('@integration'));
-        $I->see('Integrations', 'h1');
-        $I->see('Create integration', 'a');
-        $this->ensureICanSeeAdvancedSearchBox($I);
-        $this->ensureICanSeeBulkDomainSearchBox();
-    }
-
-    public function ensureICanSeeVariantsOfCreateIntegrations(Seller $I): void
-    {
-        $variants = [
-            self::PROVIDER_TYPE_DOMAIN,
-            self::PROVIDER_TYPE_CERTIFICATE,
-            self::PROVIDER_TYPE_PAYMENT,
-        ];
-
-        $I->amOnPage(Url::to('@integration'));
-        $I->click('Create integration');
-        $I->waitForElement('ul.dropdown-menu');
-
-        foreach ($variants as $variant) {
-            $I->seeElement(['css' => "a[data-target*=\"for-{$variant}\"]"]);
+        foreach ($this->getVariants() as $providerType => $providerName) {
+            $formData = $this->createFormData[$providerName]['create'];
+            $createPage = new Create($I);
+            $createPage->openModalByProviderType($providerType);
+            $createPage->createByProviderName($providerName, $formData);
+            $I->dontSeeElement("//*[contains(@class, 'has-error')]");
+            $viewPage = new View($I, $providerName);
+            $viewPage->visitIntegration();
+            $viewPage->verifyFields($formData);
         }
     }
 
-    public function ensureICanCRUDOperations(Seller $I): void
+    public function ensureICanUpdateIntegrations(Seller $I): void
     {
-        foreach ([
+        foreach ($this->getVariants() as $providerType => $providerName) {
+            $formData = $this->createFormData[$providerName]['update'];
+            $updatePage = new Update($I, $providerName);
+            $updatePage->visitIntegration();
+            $updatePage->updateByProviderName($providerName, $formData);
+            $I->dontSeeElement("//*[contains(@class, 'has-error')]");
+            $viewPage = new View($I, $providerName);
+            $viewPage->visitIntegration();
+            $viewPage->verifyFields($formData);
+        }
+    }
+
+    public function ensureICanDeleteIntegrations(Seller $I): void
+    {
+        foreach ($this->getVariants() as $providerType => $providerName) {
+            $deletePage = new Delete($I, $providerName);
+            $deletePage->visitIntegration();
+            $deletePage->deleteIntegration();
+        }
+    }
+
+    private function getVariants(): array
+    {
+        return [
             self::PROVIDER_TYPE_DOMAIN => 'directi',
             self::PROVIDER_TYPE_CERTIFICATE => 'certum',
             self::PROVIDER_TYPE_PAYMENT => 'paypal',
-                 ] as $type => $provider) {
-            $I->amOnPage(Url::to('@integration/index'));
-            $this->openModalByProviderType($I, $type);
-            $this->createByProviderName($I, $provider);
-            $id = $this->checkByProviderName($I, $provider);
-            $I->click("//a[contains(text(), 'Update')]");
-            $I->seeInTitle('Update');
-            $this->updateByProviderName($I, $provider);
-            $this->deleteItem($I, $id);
-        }
+        ];
     }
 
-    public function ensureICanNotCreateTwoItemsWithTheSameNameAndClient(Seller $I)
+    public function ensureICanNotCreateMoreThenOneIntegrationWithTheSameNameAndClient(Seller $I)
     {
-        $I->amOnPage(Url::to('@integration/index'));
-        $this->openModalByProviderType($I, self::PROVIDER_TYPE_CERTIFICATE);
-        $this->createByProviderName($I, 'paypal');
-        $firstItemId = $this->checkByProviderName($I, 'paypal');
-        $I->amOnPage(Url::to('@integration/index'));
-        $this->openModalByProviderType($I, self::PROVIDER_TYPE_CERTIFICATE);
-        $this->createByProviderName($I, 'paypal');
+        $formData = $this->createFormData['paypal']['create'];
+
+        // Create the first item
+        $createPage = new Create($I);
+        $createPage->openModalByProviderType(self::PROVIDER_TYPE_PAYMENT);
+        $createPage->createByProviderName('paypal', $formData);
+        $I->dontSeeElement("//*[contains(@class, 'has-error')]");
+
+        // Try to create the second item with the same Name and Client
+        $createPage = new Create($I);
+        $createPage->openModalByProviderType(self::PROVIDER_TYPE_PAYMENT);
+        $createPage->createByProviderName('paypal', $formData, true);
         $I->waitForText('Fields Client and Name are not unique');
-        $this->deleteItem($I, $firstItemId);
-    }
 
-    private function deleteItem(Seller $I, string $itemId)
-    {
-        $I->amOnPage(Url::to(['@integration/view', 'id' => $itemId]));
-        $I->click("//a[contains(text(), 'Delete')]");
-        $I->seeInPopup('Are you sure you want to delete this item?');
-        $I->acceptPopup();
-        $I->seeInCurrentUrl(Url::to('@integration/index'));
-        $I->seeInTitle('Integrations');
-    }
-
-    private function checkByProviderName(Seller $I, $providerName): string
-    {
-        $formData = $this->createFormData[$providerName]['create'];
-        $I->amOnPage(Url::to('@integration/index'));
-        $I->click("//a[contains(text(), '{$providerName}')]"); // [@class=\"bold\"]
-        $I->waitForJS("return $.active == 0;", 30);
-        $I->seeInTitle($providerName);
-        $I->seeInCurrentUrl('/integration/view');
-        foreach ($formData as $value) {
-            if ($value) {
-                $I->see($value);
-            }
-        }
-
-        return $I->grabFromCurrentUrl('~id=(\d+)~');
-    }
-
-    private function createByProviderName(Seller $I, string $providerName): void
-    {
-        $action = 'create';
-        $formData = $this->createFormData[$providerName]['create'];
-        $I->seeElementInDOM(['css' => "a[href$=\"{$action}-{$providerName}\"]"]);
-        $I->amOnPage(Url::to("@integration/{$action}-{$providerName}"));
-        $this->setItem($I, $providerName, $action, $formData);
-    }
-
-    private function updateByProviderName(Seller $I, string $providerName): void
-    {
-        $formData = $this->createFormData[$providerName]['update'];
-        $this->setItem($I, $providerName, 'update', $formData);
-    }
-
-    private function setItem(Seller $I, string $providerName, string $action, array $formData)
-    {
-        $I->seeInCurrentUrl(Url::to("@integration/{$action}-{$providerName}"));
-        $this->fillAndSubmitFormByProviderName($I, $formData);
-    }
-
-    private function ensureICanSeeAdvancedSearchBox(Seller $I): void
-    {
-        $this->index->containsFilters([
-            Input::asAdvancedSearch($I, 'Integration name'),
-            Select2::asAdvancedSearch($I, 'Client'),
-            (Dropdown::asAdvancedSearch($I, 'Status'))->withItems([
-                'Ok',
-                'Disabled',
-            ]),
-        ]);
-    }
-
-    private function ensureICanSeeBulkDomainSearchBox(): void
-    {
-        $this->index->containsColumns([
-            'Name',
-            'Provider',
-            'Client',
-            'Type',
-            'Status',
-        ]);
-    }
-
-    private function openModalByProviderType(Seller $I, string $type): void
-    {
-        $I->click('Create integration');
-        $I->waitForElement('ul.dropdown-menu');
-        $I->click(['css' => "a[data-target$=\"for-{$type}\"]"]);
-        $I->waitForElement('div.provider-variants');
-    }
-
-    /**
-     * @param Seller $I
-     * @param array $formData
-     * @throws \Codeception\Exception\ModuleException
-     */
-    private function fillAndSubmitFormByProviderName(Seller $I, array $formData): void
-    {
-        $I->seeElementInDom(['css' => 'select[name$="[client_id]"]']);
-
-        foreach ($formData as $field => $value) {
-            if ($value) {
-                (new Input($I, "input[name$=\"[{$field}]\"]"))->setValue($value);
-            } else {
-                $I->seeElement(['css' => "input[name$=\"[{$field}]\"]"]);
-            }
-        }
-
-        $I->pressButton('Save');
-        $I->waitForJS("return $.active == 0;", 30);
+        // Delete the first item
+        $deletePage = new Delete($I, 'paypal');
+        $deletePage->visitIntegration();
+        $deletePage->deleteIntegration();
     }
 }
