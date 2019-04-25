@@ -18,6 +18,17 @@ use hipanel\tests\_support\Page\Widget\Input\Dropdown;
 
 class Index extends Integration
 {
+    /**
+     * @var IndexPage
+     */
+    private $indexPage;
+
+    public function __construct($I)
+    {
+        parent::__construct($I);
+        $this->indexPage = new IndexPage($I);
+    }
+
     public function ensureIndexPageWorks(): self
     {
         $I = $this->tester;
@@ -32,10 +43,9 @@ class Index extends Integration
     public function ensureICanSeeAdvancedSearchBox(): self
     {
         $I = $this->tester;
-        $indexPage = new IndexPage($I);
 
         $I->see('Advanced search', 'h3');
-        $indexPage->containsFilters([
+        $this->indexPage->containsFilters([
             Input::asAdvancedSearch($I, 'Integration name'),
             Select2::asAdvancedSearch($I, 'Client'),
             Dropdown::asAdvancedSearch($I, 'Status')->withItems([
@@ -49,10 +59,7 @@ class Index extends Integration
 
     public function ensureICanSeeColumns(): self
     {
-        $I = $this->tester;
-        $indexPage = new IndexPage($I);
-
-        $indexPage->containsColumns([
+        $this->indexPage->containsColumns([
             'Name',
             'Provider',
             'Client',

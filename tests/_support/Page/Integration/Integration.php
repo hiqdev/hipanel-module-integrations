@@ -2,7 +2,6 @@
 
 namespace hipanel\modules\integrations\tests\_support\Page\Integration;
 
-use hipanel\helpers\Url;
 use hipanel\tests\_support\Page\Authenticated;
 use hipanel\tests\_support\Page\Widget\Input\Input;
 

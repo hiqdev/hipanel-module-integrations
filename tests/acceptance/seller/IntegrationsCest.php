@@ -52,6 +52,15 @@ class IntegrationsCest
         ]
     ];
 
+    private function getVariants(): array
+    {
+        return [
+            self::PROVIDER_TYPE_DOMAIN => 'directi',
+            self::PROVIDER_TYPE_CERTIFICATE => 'certum',
+            self::PROVIDER_TYPE_PAYMENT => 'paypal',
+        ];
+    }
+
     public function ensureIntegrationsPageWorks(Seller $I): void
     {
         $variants = array_keys($this->getVariants());
@@ -99,29 +108,20 @@ class IntegrationsCest
         }
     }
 
-    private function getVariants(): array
-    {
-        return [
-            self::PROVIDER_TYPE_DOMAIN => 'directi',
-            self::PROVIDER_TYPE_CERTIFICATE => 'certum',
-            self::PROVIDER_TYPE_PAYMENT => 'paypal',
-        ];
-    }
-
-    public function ensureICanNotCreateMoreThenOneIntegrationWithTheSameNameAndClient(Seller $I)
+    public function ensureICanNotCreateMoreThenOneIntegrationWithTheSameNameAndClient(Seller $I): void
     {
         $formData = $this->createFormData['paypal']['create'];
 
         // Create the first item
-        $createPage = new Create($I);
-        $createPage->openModalByProviderType(self::PROVIDER_TYPE_PAYMENT);
-        $createPage->createByProviderName('paypal', $formData);
+        $createFirstItemPage = new Create($I);
+        $createFirstItemPage->openModalByProviderType(self::PROVIDER_TYPE_PAYMENT);
+        $createFirstItemPage->createByProviderName('paypal', $formData);
         $I->dontSeeElement("//*[contains(@class, 'has-error')]");
 
         // Try to create the second item with the same Name and Client
-        $createPage = new Create($I);
-        $createPage->openModalByProviderType(self::PROVIDER_TYPE_PAYMENT);
-        $createPage->createByProviderName('paypal', $formData, true);
+        $createSecondItemPage = new Create($I);
+        $createSecondItemPage->openModalByProviderType(self::PROVIDER_TYPE_PAYMENT);
+        $createSecondItemPage->createByProviderName('paypal', $formData, true);
         $I->waitForText('Fields Client and Name are not unique');
 
         // Delete the first item
