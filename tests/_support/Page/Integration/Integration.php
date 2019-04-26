@@ -25,6 +25,20 @@ abstract class Integration extends Authenticated
         return $this;
     }
 
+    public function hasNotErrors(): self
+    {
+        $this->tester->dontSeeElement("//*[contains(@class, 'has-error')]");
+
+        return $this;
+    }
+
+    public function hasErrors(): self
+    {
+        $this->tester->seeElement("//*[contains(@class, 'has-error')]");
+
+        return $this;
+    }
+
     protected function setItem(string $providerName, string $action, array $formData): void
     {
         $I = $this->tester;

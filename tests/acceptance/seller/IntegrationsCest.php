@@ -2,6 +2,7 @@
 
 namespace hipanel\modules\integrations\tests\acceptance\seller;
 
+use Codeception\Example;
 use hipanel\modules\integrations\tests\_support\Page\Integration\Create;
 use hipanel\modules\integrations\tests\_support\Page\Integration\Delete;
 use hipanel\modules\integrations\tests\_support\Page\Integration\Index;
@@ -54,18 +55,25 @@ class IntegrationsCest
         ]
     ];
 
-    private function getVariants(): array
+    /**
+     * @return array
+     */
+    protected function variantsProvider(): array
     {
         return [
-            self::PROVIDER_TYPE_DOMAIN => 'directi',
-            self::PROVIDER_TYPE_CERTIFICATE => 'certum',
-            self::PROVIDER_TYPE_PAYMENT => 'paypal',
+            ['type' => self::PROVIDER_TYPE_PAYMENT, 'name' => 'paypal'],
+            ['type' => self::PROVIDER_TYPE_DOMAIN, 'name' => 'directi'],
+            ['type' => self::PROVIDER_TYPE_CERTIFICATE, 'name' => 'certum'],
         ];
     }
 
     public function ensureIntegrationsPageWorks(Seller $I): void
     {
-        $variants = array_keys($this->getVariants());
+        $variants = [
+            self::PROVIDER_TYPE_DOMAIN,
+            self::PROVIDER_TYPE_CERTIFICATE,
+            self::PROVIDER_TYPE_PAYMENT,
+        ];
         $indexPage = new Index($I);
         $indexPage->ensureIndexPageWorks();
         $indexPage->ensureICanSeeAdvancedSearchBox();
@@ -73,41 +81,51 @@ class IntegrationsCest
         $indexPage->ensureICanSeeVariantsOfCreateIntegrations($variants);
     }
 
-    public function ensureICanCreateIntegrations(Seller $I): void
+    /**
+     * @dataProvider variantsProvider
+     * @param Seller $I
+     * @param Example $provider
+     */
+    public function ensureICanCreateIntegrations(Seller $I, Example $provider): void
     {
-        foreach ($this->getVariants() as $providerType => $providerName) {
-            $formData = $this->createFormData[$providerName]['create'];
-            $createPage = new Create($I);
-            $createPage->openModalByProviderType($providerType);
-            $createPage->createByProviderName($providerName, $formData);
-            $I->dontSeeElement("//*[contains(@class, 'has-error')]");
-            $viewPage = new View($I, $providerName);
-            $viewPage->visitIntegration();
-            $viewPage->verifyFields($formData);
-        }
+        $formData = $this->createFormData[$provider['name']]['create'];
+        $createPage = new Create($I);
+        $createPage->openModalByProviderType($provider['type']);
+        $createPage->createByProviderName($provider['name'], $formData);
+        $createPage->hasNotErrors();
+        $viewPage = new View($I, $provider['name']);
+        $viewPage->visitIntegration();
+        $viewPage->verifyFields($formData);
     }
 
-    public function ensureICanUpdateIntegrations(Seller $I): void
+
+    /**
+     * @dataProvider variantsProvider
+     * @param Seller $I
+     * @param Example $provider
+     */
+    public function ensureICanUpdateIntegrations(Seller $I, Example $provider): void
     {
-        foreach ($this->getVariants() as $providerType => $providerName) {
-            $formData = $this->createFormData[$providerName]['update'];
-            $updatePage = new Update($I, $providerName);
-            $updatePage->visitIntegration();
-            $updatePage->updateByProviderName($providerName, $formData);
-            $I->dontSeeElement("//*[contains(@class, 'has-error')]");
-            $viewPage = new View($I, $providerName);
-            $viewPage->visitIntegration();
-            $viewPage->verifyFields($formData);
-        }
+        $formData = $this->createFormData[$provider['name']]['update'];
+        $updatePage = new Update($I, $provider['name']);
+        $updatePage->visitIntegration();
+        $updatePage->updateByProviderName($provider['name'], $formData);
+        $updatePage->hasNotErrors();
+        $viewPage = new View($I, $provider['name']);
+        $viewPage->visitIntegration();
+        $viewPage->verifyFields($formData);
     }
 
-    public function ensureICanDeleteIntegrations(Seller $I): void
+    /**
+     * @dataProvider variantsProvider
+     * @param Seller $I
+     * @param Example $provider
+     */
+    public function ensureICanDeleteIntegrations(Seller $I, Example $provider): void
     {
-        foreach ($this->getVariants() as $providerType => $providerName) {
-            $deletePage = new Delete($I, $providerName);
-            $deletePage->visitIntegration();
-            $deletePage->deleteIntegration();
-        }
+        $deletePage = new Delete($I, $provider['name']);
+        $deletePage->visitIntegration();
+        $deletePage->deleteIntegration();
     }
 
     public function ensureICanNotCreateMoreThenOneIntegrationWithTheSameNameAndClient(Seller $I): void
@@ -118,12 +136,13 @@ class IntegrationsCest
         $createFirstItemPage = new Create($I);
         $createFirstItemPage->openModalByProviderType(self::PROVIDER_TYPE_PAYMENT);
         $createFirstItemPage->createByProviderName('paypal', $formData);
-        $I->dontSeeElement("//*[contains(@class, 'has-error')]");
+        $createFirstItemPage->hasNotErrors();
 
         // Try to create the second item with the same Name and Client
         $createSecondItemPage = new Create($I);
         $createSecondItemPage->openModalByProviderType(self::PROVIDER_TYPE_PAYMENT);
         $createSecondItemPage->createByProviderName('paypal', $formData, true);
+        $createSecondItemPage->hasErrors();
         $I->waitForText('Fields Client and Name are not unique');
 
         // Delete the first item
