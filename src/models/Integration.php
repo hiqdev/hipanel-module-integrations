@@ -28,7 +28,7 @@ class Integration extends Model
     {
         return array_merge(parent::rules(), [
             [['id', 'client_id', 'type_id', 'state_id', 'provider_id'], 'integer'],
-            [['client', 'state', 'provider_name', 'provider_label', 'name', 'url', 'login', 'access', 'password', 'type', 'type_label', 'state_label'], 'string'],
+            [['client', 'state', 'provider_name', 'provider_label', 'name', 'url', 'login', 'access', 'password', 'type', 'type_label', 'state_label', 'currency'], 'string'],
             ['id', 'required', 'on' => 'delete'],
         ]);
     }

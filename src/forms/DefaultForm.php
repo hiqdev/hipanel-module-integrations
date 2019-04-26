@@ -2,9 +2,11 @@
 
 namespace hipanel\modules\integrations\forms;
 
+use hipanel\models\Ref;
 use hipanel\modules\client\widgets\combo\ClientCombo;
 use hipanel\modules\integrations\models\Integration;
 use hipanel\modules\integrations\widgets\IntegrationFormBuilder;
+use hipanel\widgets\RefCombo;
 use hiqdev\hiart\ActiveQuery;
 use Yii;
 use yii\base\Model;
@@ -29,6 +31,8 @@ class DefaultForm extends Model implements IntegrationFormInterface
     public $client_id;
 
     public $type_id;
+
+    public $currency;
 
     public $data;
 
@@ -143,6 +147,14 @@ class DefaultForm extends Model implements IntegrationFormInterface
             } elseif ($attribute === 'type_id') {
                 $cfg['type'] = IntegrationFormBuilder::INPUT_HIDDEN;
                 $cfg['label'] = false;
+            } elseif ($attribute === 'currency') {
+                $cfg['type'] = IntegrationFormBuilder::INPUT_DROPDOWN_LIST;
+                $cfg['options']['prompt'] = '--';
+                $cfg['items'] = Ref::getList('type,currency', 'hipanel', [
+                    'mapOptions' => ['to' => function (Ref $ref) {
+                        return strtoupper($ref->name);
+                    }],
+                ]);
             } else {
                 $cfg['type'] = IntegrationFormBuilder::INPUT_TEXT;
             }
@@ -154,13 +166,12 @@ class DefaultForm extends Model implements IntegrationFormInterface
     }
 
 
-
     public function rules(): array
     {
         $rules = [
             [['id', 'provider_id', 'type_id', 'client_id'], 'integer'],
             ['url', 'url'],
-            [['name', 'login', 'password', 'data'], 'string'],
+            [['name', 'login', 'password', 'data', 'currency'], 'string'],
             [['name'], 'required', 'on' => ['create', 'update']],
             [['name'], 'unique', 'targetAttribute' => ['client_id', 'name'],
                 'targetClass' => Integration::class,

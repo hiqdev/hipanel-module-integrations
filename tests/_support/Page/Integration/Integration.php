@@ -3,6 +3,7 @@
 namespace hipanel\modules\integrations\tests\_support\Page\Integration;
 
 use hipanel\tests\_support\Page\Authenticated;
+use hipanel\tests\_support\Page\Widget\Input\Dropdown;
 use hipanel\tests\_support\Page\Widget\Input\Input;
 
 abstract class Integration extends Authenticated
@@ -39,7 +40,11 @@ abstract class Integration extends Authenticated
 
         foreach ($formData as $field => $value) {
             if ($value) {
-                (new Input($I, "input[name$=\"[{$field}]\"]"))->setValue($value);
+                if ($field === 'currency') {
+                    (new Dropdown($I, "select[name$=\"[{$field}]\"]"))->setValue($value);
+                } else {
+                    (new Input($I, "input[name$=\"[{$field}]\"]"))->setValue($value);
+                }
             } else {
                 $I->seeElement(['css' => "input[name$=\"[{$field}]\"]"]);
             }

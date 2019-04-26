@@ -45,9 +45,11 @@ class IntegrationsCest
         'paypal' => [
             'create' => [
                 'login' => 'login_test_paypal',
+                'currency' => 'eur',
             ],
             'update' => [
                 'login' => 'login_test_paypal_updated',
+                'currency' => 'usd',
             ],
         ]
     ];
