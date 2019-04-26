@@ -11,10 +11,12 @@
 namespace hipanel\modules\integrations\controllers;
 
 use hipanel\actions\IndexAction;
+use hipanel\actions\SmartDeleteAction;
 use hipanel\actions\ViewAction;
 use hipanel\base\CrudController;
 use hipanel\filters\EasyAccessControl;
 use hipanel\modules\integrations\data\ProvidersDataProvider;
+use Yii;
 use yii\base\Module;
 
 class IntegrationController extends CrudController
@@ -68,6 +70,11 @@ class IntegrationController extends CrudController
             'view' => [
                 'class' => ViewAction::class,
             ],
+            'delete' => [
+                'class' => SmartDeleteAction::class,
+                'success' => Yii::t('hipanel.integrations', 'Integration has been deleted'),
+                'error' => Yii::t('hipanel.integrations', 'Failed to delete integration'),
+            ]
         ], $this->getMandatoryActions());
 
         return $actions;
