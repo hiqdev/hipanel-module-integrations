@@ -5,16 +5,16 @@
  * @var array $providerTypes
  * @var IntegrationSearch $model
  * @var IndexPageUiOptions $uiModel
- * @var HubRepresentations $representationCollection
+ * @var IntegrationRepresentations $representationCollection
  * @var ActiveDataProvider $dataProvider
  */
 
 use hipanel\models\IndexPageUiOptions;
 use hipanel\modules\integrations\grid\IntegrationGridLegend;
 use hipanel\modules\integrations\grid\IntegrationGridView;
+use hipanel\modules\integrations\grid\IntegrationRepresentations;
 use hipanel\modules\integrations\models\IntegrationSearch;
 use hipanel\modules\integrations\widgets\CreateIntegrationButton;
-use hipanel\modules\server\grid\HubRepresentations;
 use hipanel\widgets\gridLegend\GridLegend;
 use hipanel\widgets\IndexPage;
 use hipanel\widgets\Pjax;
@@ -35,6 +35,12 @@ $subtitle = array_filter(Yii::$app->request->get($model->formName(), [])) ? Yii:
                     'allowedTypes' => $providerTypes,
                 ]) ?>
             <?php endif; ?>
+        <?php $page->endContent() ?>
+
+        <?php $page->beginContent('bulk-actions') ?>
+            <?php if (Yii::$app->user->can('integration.delete')) : ?>
+                <?= $page->renderBulkDeleteButton('@integration/delete') ?>
+            <?php endif ?>
         <?php $page->endContent() ?>
 
         <?php $page->beginContent('table') ?>

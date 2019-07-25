@@ -10,33 +10,17 @@
 
 namespace hipanel\modules\integrations\menus;
 
-use Yii;
+use hipanel\menus\AbstractDetailMenu;
 
-class IntegrationDetailMenu extends \hipanel\menus\AbstractDetailMenu
+class IntegrationDetailMenu extends AbstractDetailMenu
 {
     public $model;
 
-    public function items()
+    public function items(): array
     {
         $actions = IntegrationActionsMenu::create(['model' => $this->model])->items();
-        $items = array_merge($actions, [
-            'delete' => [
-                'label' => Yii::t('hipanel', 'Delete'),
-                'icon' => 'fa-trash',
-                'url' => ['@integration/delete', 'id' => $this->model->id],
-                'encode' => false,
-                'visible' => Yii::$app->user->can('integration.delete'),
-                'linkOptions' => [
-                    'data' => [
-                        'confirm' => Yii::t('hipanel', 'Are you sure you want to delete this item?'),
-                        'method' => 'POST',
-                        'pjax' => '0',
-                    ],
-                ],
-            ],
-        ]);
-        unset($items['view']);
+        unset($actions['view']);
 
-        return $items;
+        return $actions;
     }
 }

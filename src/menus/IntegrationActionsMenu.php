@@ -37,6 +37,20 @@ class IntegrationActionsMenu extends MenuAlias
                     'data-pjax' => 0,
                 ],
             ],
+            'delete' => [
+                'label' => Yii::t('hipanel', 'Delete'),
+                'icon' => 'fa-trash',
+                'url' => ['@integration/delete', 'id' => $this->model->id],
+                'encode' => false,
+                'visible' => Yii::$app->user->can('integration.delete'),
+                'linkOptions' => [
+                    'data' => [
+                        'confirm' => Yii::t('hipanel', 'Are you sure you want to delete this item?'),
+                        'method' => 'POST',
+                        'pjax' => '0',
+                    ],
+                ],
+            ],
         ];
     }
 }

@@ -13,6 +13,7 @@ class IntegrationRepresentations extends RepresentationCollection
             'common' => [
                 'label' => Yii::t('hipanel', 'common'),
                 'columns' => [
+                    'checkbox',
                     'actions',
                     'name',
                     'provider_label',
