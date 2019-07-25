@@ -17,7 +17,7 @@ class SidebarMenu extends Menu
 {
     public function items()
     {
-        return Yii::$app->user->can('resell') && Yii::$app->user->can('integration.read') ? [
+        return Yii::$app->user->can('integration.read') ? [
             'settings' => [
                 'label' => Yii::t('hipanel.integrations', 'Settings'),
                 'url' => '#',
