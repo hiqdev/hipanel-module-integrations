@@ -1,9 +1,8 @@
 <?php
 
+use hipanel\modules\integrations\data\ProvidersDataProvider;
 use hipanel\modules\integrations\grid\IntegrationGridView;
 use hipanel\modules\integrations\menus\IntegrationDetailMenu;
-use hipanel\modules\integrations\models\Provider;
-use hipanel\widgets\Box;
 use hipanel\widgets\MainDetails;
 use yii\helpers\Html;
 use yii\helpers\Json;
@@ -21,6 +20,7 @@ unset($onlyColumns['api_type_id']);
         <?= MainDetails::widget([
             'title' => $model->pageTitle,
             'icon' => 'fa-share-alt',
+            'titleOptions' => ['style' => 'word-break: break-all;'],
             'subTitle' => Html::a($model->client, ['@client/view', 'id' => $model->client_id]),
             'menu' => IntegrationDetailMenu::widget(['model' => $model], ['linkTemplate' => '<a href="{url}" {linkOptions}><span class="pull-right">{icon}</span>&nbsp;{label}</a>']),
         ]) ?>
@@ -32,7 +32,7 @@ unset($onlyColumns['api_type_id']);
             </div>
             <div class="box-body no-padding">
                 <?= IntegrationGridView::detailView([
-                    'model' => $model,
+                    'model' => Yii::createObject(['class' => ProvidersDataProvider::getFormClassByProvider($model->provider)])::fromIntegration($model),
                     'boxed' => false,
                     'columns' => array_merge(['name', 'access'], array_keys($onlyColumns)),
                 ]) ?>

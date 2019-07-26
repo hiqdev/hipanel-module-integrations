@@ -19,4 +19,13 @@ return [
     'domain registrar' => 'регистратором доменов',
     'certificate provider' => 'поставщиком сертификатов',
     'payment gateway' => 'платежным шлюзом',
+    'Commission' => 'Комиссия',
+    'Currency' => 'Валюта',
+    'Purse' => 'Кошелек',
+    'Secret word' => 'Секретное слово',
+    'Store ID' => 'Идентификатор магазина',
+    'Password 1' => 'Пароль 1',
+    'Password 2' => 'Пароль 2',
+    'Access' => 'Доступ',
+    'Information about integration' => 'Подробная информация',
 ];
