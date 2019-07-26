@@ -7,6 +7,7 @@ use hipanel\base\ModelTrait;
 use Yii;
 use yii\base\DynamicModel;
 use yii\db\ActiveQuery;
+use yii\web\AssetManager;
 
 class Provider extends Model
 {
@@ -56,10 +57,12 @@ class Provider extends Model
     public function findImageByName(): ?string
     {
         $src = null;
+        /* @var $assetManager AssetManager */
+        $assetManager = Yii::$app->assetManager;
         $pathToImage = Yii::getAlias(sprintf('%s/%s.png', '@vendor/hiqdev/payment-icons/src/assets/png/sm', $this->name));
         if (is_file($pathToImage)) {
-            Yii::$app->assetManager->publish($pathToImage);
-            $src = Yii::$app->assetManager->getPublishedUrl($pathToImage);
+            $assetManager->publish($pathToImage);
+            $src = $assetManager->getPublishedUrl($pathToImage);
         }
 
         return $src;

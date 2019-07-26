@@ -6,7 +6,6 @@ use hipanel\models\Ref;
 use hipanel\modules\client\widgets\combo\ClientCombo;
 use hipanel\modules\integrations\models\Integration;
 use hipanel\modules\integrations\widgets\IntegrationFormBuilder;
-use hipanel\widgets\RefCombo;
 use hiqdev\hiart\ActiveQuery;
 use Yii;
 use yii\base\Model;
@@ -18,15 +17,19 @@ class DefaultForm extends Model implements IntegrationFormInterface
 
     public $name;
 
+    public $access;
+
     public $url;
 
     public $login;
 
     public $password;
 
+    public $provider_id;
+
     public $provider_name;
 
-    public $provider_id;
+    public $provider_type;
 
     public $client_id;
 
@@ -34,11 +37,17 @@ class DefaultForm extends Model implements IntegrationFormInterface
 
     public $currency;
 
+    public $commission;
+
+    public $key2;
+
+    public $key3;
+
     public $data;
 
     public static function fromIntegration(Integration $integration, string $scenario = 'update'): self
     {
-        $form = new self(['scenario' => $scenario]);
+        $form = new static(['scenario' => $scenario]);
         foreach ($integration as $attribute => $value) {
             if ($form->hasProperty($attribute)) {
                 $form->{$attribute} = $value;
@@ -137,6 +146,12 @@ class DefaultForm extends Model implements IntegrationFormInterface
             'label' => false,
         ];
 
+        if ($this->provider_type === 'payment') {
+            $config['commission'] = [
+                'type' => IntegrationFormBuilder::INPUT_HTML5,
+                'html5type' => 'number',
+            ];
+        }
 
         foreach ($this->getDefaultFields() as $attribute => $value) {
             $cfg = [];
@@ -170,8 +185,9 @@ class DefaultForm extends Model implements IntegrationFormInterface
     {
         $rules = [
             [['id', 'provider_id', 'type_id', 'client_id'], 'integer'],
-            ['url', 'url'],
-            [['name', 'login', 'password', 'data', 'currency'], 'string'],
+            [['commission'], 'number'],
+            [['url'], 'url'],
+            [['name', 'login', 'password', 'data', 'currency', 'key2', 'key3'], 'string'],
             [['name'], 'required', 'on' => ['create', 'update']],
             [['name'], 'unique', 'targetAttribute' => ['client_id', 'name'],
                 'targetClass' => Integration::class,
@@ -183,7 +199,9 @@ class DefaultForm extends Model implements IntegrationFormInterface
             ],
         ];
         // Add default required
-        $rules[] = [array_keys($this->getDefaultFields()), 'required', 'on' => ['create', 'update']];
+        $defaultFields = $this->getDefaultFields();
+        unset($defaultFields['commission']);
+        $rules[] = [array_keys($defaultFields), 'required', 'on' => ['create', 'update']];
 
         return $rules;
     }
@@ -196,6 +214,9 @@ class DefaultForm extends Model implements IntegrationFormInterface
             'login' => Yii::t('hipanel.integrations', 'Login'),
             'password' => Yii::t('hipanel.integrations', 'Password'),
             'client_id' => Yii::t('hipanel', 'Client'),
+            'commission' => Yii::t('hipanel.integrations', 'Commission'),
+            'currency' => Yii::t('hipanel.integrations', 'Currency'),
+            'access' => Yii::t('hipanel.integrations', 'Access'),
         ];
     }
 

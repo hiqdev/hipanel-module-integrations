@@ -28,7 +28,8 @@ class Integration extends Model
     {
         return array_merge(parent::rules(), [
             [['id', 'client_id', 'type_id', 'state_id', 'provider_id'], 'integer'],
-            [['client', 'state', 'provider_name', 'provider_label', 'name', 'url', 'login', 'access', 'password', 'type', 'type_label', 'state_label', 'currency'], 'string'],
+            [['commission'], 'number'],
+            [['client', 'state', 'provider_name', 'provider_label', 'name', 'url', 'login', 'access', 'password', 'type', 'type_label', 'state_label', 'currency', 'key2', 'key3'], 'string'],
             ['id', 'required', 'on' => 'delete'],
         ]);
     }
@@ -42,6 +43,8 @@ class Integration extends Model
             'provider_name' => Yii::t('hipanel.integrations', 'Provider'),
             'provider_label' => Yii::t('hipanel.integrations', 'Provider'),
             'name' => Yii::t('hipanel.integrations', 'Name'),
+            'commission' => Yii::t('hipanel.integrations', 'Commission'),
+            'currency' => Yii::t('hipanel.integrations', 'Currency'),
         ]);
     }
 

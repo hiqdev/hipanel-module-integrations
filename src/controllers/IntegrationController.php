@@ -90,7 +90,8 @@ class IntegrationController extends CrudController
         $types = $this->getRefs('type,provider');
 
         return array_filter($types, function (string $label, string $type): bool {
-            return in_array($type, ['payment', 'certificate', 'domain'], true); // only these types are available for now
+            $availableTypes = Yii::$app->user->can('resell') ? ['payment'] : ['payment', 'certificate', 'domain'];
+            return in_array($type, $availableTypes, true); // only these types are available for now
         }, ARRAY_FILTER_USE_BOTH);
     }
 

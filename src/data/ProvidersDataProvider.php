@@ -20,6 +20,13 @@ class ProvidersDataProvider
      */
     private $app;
 
+    public static function getFormClassByProvider(Provider $provider): string
+    {
+        $className = sprintf('\hipanel\modules\integrations\forms\%sForm', ucfirst($provider->name));
+
+        return class_exists($className) ? $className : DefaultForm::class;
+    }
+
     public function __construct(Application $app)
     {
         $this->app = $app;
@@ -28,7 +35,7 @@ class ProvidersDataProvider
     public function getProviders(): array
     {
         $providers = $this->allProviders = $this->app->cache->getOrSet([__METHOD__, $this->app->user->id], function () {
-            return Provider::find()->limit(-1)->all();
+            return Provider::find()->where(['state' => 'ok'])->limit(-1)->all();
         }, 1800); // 30 minutes
 
         return $providers;
@@ -44,7 +51,7 @@ class ProvidersDataProvider
         $actions = [];
 
         foreach ($this->getProviders() as $provider) {
-            $class = $this->getFormClassByProvider($provider);
+            $class = self::getFormClassByProvider($provider);
 
             $actions['create-' . $provider->name] = [
                 'class' => SmartCreateAction::class,
@@ -56,6 +63,7 @@ class ProvidersDataProvider
                         'data' => $provider->data,
                         'provider_id' => $provider->id,
                         'provider_name' => $provider->name,
+                        'provider_type' => $provider->type,
                     ]),
                     'scenario' => 'create',
                 ],
@@ -71,6 +79,7 @@ class ProvidersDataProvider
                         'data' => $provider->data,
                         'provider_id' => $provider->id,
                         'provider_name' => $provider->name,
+                        'provider_type' => $provider->type,
                     ]),
                     'scenario' => 'update',
                 ],
@@ -96,10 +105,5 @@ class ProvidersDataProvider
         }
 
         return $actions;
-    }
-
-    private function getFormClassByProvider(Provider $provider): string
-    {
-        return DefaultForm::class; // todo: implement search form class by provider
     }
 }
