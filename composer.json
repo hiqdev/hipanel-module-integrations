@@ -54,7 +54,7 @@
     },
     "extra": {
         "config-plugin": {
-            "params": "config/params.php",
+            "params": "src/config/params.php",
             "web": "src/config/web.php"
         }
     },
