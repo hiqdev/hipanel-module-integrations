@@ -57,7 +57,7 @@ class Provider extends Model
     public function findImageByName(): ?string
     {
         $src = null;
-        /* @var $assetManager AssetManager */
+        /** @var AssetManager $assetManager */
         $assetManager = Yii::$app->assetManager;
         $pathToImage = Yii::getAlias(sprintf('%s/%s.png', '@vendor/hiqdev/payment-icons/src/assets/png/sm', $this->name));
         if (is_file($pathToImage)) {

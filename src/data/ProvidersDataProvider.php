@@ -13,7 +13,7 @@ use yii\base\Action;
 use yii\base\Application;
 use Yii;
 
-class ProvidersDataProvider
+final class ProvidersDataProvider
 {
     /**
      * @var Application
