@@ -4,6 +4,7 @@ namespace hipanel\modules\integrations\forms;
 
 use hipanel\models\Ref;
 use hipanel\modules\client\widgets\combo\ClientCombo;
+use hipanel\modules\integrations\helpers\ConfigSort;
 use hipanel\modules\integrations\models\Integration;
 use hipanel\modules\integrations\widgets\IntegrationFormBuilder;
 use hiqdev\hiart\ActiveQuery;
@@ -177,7 +178,7 @@ class DefaultForm extends Model implements IntegrationFormInterface
             $config[$attribute] = $cfg;
         }
 
-        return array_filter($config);
+        return array_filter(ConfigSort::anyConfigs()->keys($config));
     }
 
 
