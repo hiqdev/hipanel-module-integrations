@@ -2,6 +2,7 @@
 
 use hipanel\modules\integrations\data\ProvidersDataProvider;
 use hipanel\modules\integrations\grid\IntegrationGridView;
+use hipanel\modules\integrations\helpers\ConfigSort;
 use hipanel\modules\integrations\menus\IntegrationDetailMenu;
 use hipanel\widgets\MainDetails;
 use yii\helpers\Html;
@@ -13,6 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 $onlyColumns = Json::decode($model->provider->data);
 unset($onlyColumns['api_type_id']);
+$columns = array_merge(['name', 'access'], array_keys($onlyColumns));
 
 ?>
 <div class="row">
@@ -34,7 +36,7 @@ unset($onlyColumns['api_type_id']);
                 <?= IntegrationGridView::detailView([
                     'model' => Yii::createObject(['class' => ProvidersDataProvider::getFormClassByProvider($model->provider)])::fromIntegration($model),
                     'boxed' => false,
-                    'columns' => array_merge(['name', 'access'], array_keys($onlyColumns)),
+                    'columns' => ConfigSort::anyConfigs()->values($columns),
                 ]) ?>
             </div>
         </div>
