@@ -215,7 +215,7 @@ class DefaultForm extends Model implements IntegrationFormInterface
             'login' => Yii::t('hipanel.integrations', 'Login'),
             'password' => Yii::t('hipanel.integrations', 'Password'),
             'client_id' => Yii::t('hipanel', 'Client'),
-            'commission' => Yii::t('hipanel.integrations', 'Commission'),
+            'commission' => Yii::t('hipanel.integrations', 'Commission, %'),
             'currency' => Yii::t('hipanel.integrations', 'Currency'),
             'access' => Yii::t('hipanel.integrations', 'Access'),
         ];

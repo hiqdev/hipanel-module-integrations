@@ -43,7 +43,7 @@ class Integration extends Model
             'provider_name' => Yii::t('hipanel.integrations', 'Provider'),
             'provider_label' => Yii::t('hipanel.integrations', 'Provider'),
             'name' => Yii::t('hipanel.integrations', 'Name'),
-            'commission' => Yii::t('hipanel.integrations', 'Commission'),
+            'commission' => Yii::t('hipanel.integrations', 'Commission, %'),
             'currency' => Yii::t('hipanel.integrations', 'Currency'),
         ]);
     }

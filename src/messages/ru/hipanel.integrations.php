@@ -19,7 +19,7 @@ return [
     'domain registrar' => 'регистратором доменов',
     'certificate provider' => 'поставщиком сертификатов',
     'payment gateway' => 'платежным шлюзом',
-    'Commission' => 'Комиссия',
+    'Commission, %' => 'Комиссия, %',
     'Currency' => 'Валюта',
     'Purse' => 'Кошелек',
     'Secret word' => 'Секретное слово',
