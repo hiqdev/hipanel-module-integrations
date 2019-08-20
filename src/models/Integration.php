@@ -30,7 +30,7 @@ class Integration extends Model
             [['id', 'client_id', 'type_id', 'state_id', 'provider_id'], 'integer'],
             [['commission'], 'number'],
             [['client', 'state', 'provider_name', 'provider_label', 'name', 'url', 'login', 'access', 'password', 'type', 'type_label', 'state_label', 'currency', 'key2', 'key3'], 'string'],
-            ['id', 'required', 'on' => 'delete'],
+            ['id', 'required', 'on' => ['delete', 'enable', 'disable']],
         ]);
     }
 

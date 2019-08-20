@@ -38,6 +38,10 @@ $subtitle = array_filter(Yii::$app->request->get($model->formName(), [])) ? Yii:
         <?php $page->endContent() ?>
 
         <?php $page->beginContent('bulk-actions') ?>
+            <?php if (Yii::$app->user->can('integration.update')) : ?>
+                <?= $page->renderBulkButton('@integration/disable', Yii::t('hipanel', 'Disable')) ?>
+                <?= $page->renderBulkButton('@integration/enable', Yii::t('hipanel', 'Enable')) ?>
+            <?php endif ?>
             <?php if (Yii::$app->user->can('integration.delete')) : ?>
                 <?= $page->renderBulkDeleteButton('@integration/delete') ?>
             <?php endif ?>

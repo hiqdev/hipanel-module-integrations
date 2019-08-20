@@ -28,4 +28,8 @@ return [
     'Password 2' => 'Пароль 2',
     'Access' => 'Доступ',
     'Information about integration' => 'Подробная информация',
+    'Failed to disable integrations' => 'Ошибка при отключении интеграций',
+    'Failed to enable integrations' => 'Ошибка при включении интеграций',
+    'Integrations have been disabled' => 'Инетграции отключены',
+    'Integrations have been enabled' => 'Инетграции включены',
 ];

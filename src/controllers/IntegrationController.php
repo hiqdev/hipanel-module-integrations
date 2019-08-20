@@ -12,6 +12,7 @@ namespace hipanel\modules\integrations\controllers;
 
 use hipanel\actions\IndexAction;
 use hipanel\actions\SmartDeleteAction;
+use hipanel\actions\SmartPerformAction;
 use hipanel\actions\ViewAction;
 use hipanel\base\CrudController;
 use hipanel\filters\EasyAccessControl;
@@ -35,6 +36,8 @@ class IntegrationController extends CrudController
                     'create' => 'integration.create',
                     'update' => 'integration.update',
                     'delete' => 'integration.delete',
+                    'disable'=> 'integration.update',
+                    'enable' => 'integration.update',
                     '*' => 'integration.read',
                 ],
             ],
@@ -57,7 +60,7 @@ class IntegrationController extends CrudController
 
     public function actions()
     {
-        $actions = array_merge(parent::actions(), [
+        return array_merge(parent::actions(), [
             'index' => [
                 'class' => IndexAction::class,
                 'data' => function ($action) {
@@ -74,10 +77,18 @@ class IntegrationController extends CrudController
                 'class' => SmartDeleteAction::class,
                 'success' => Yii::t('hipanel.integrations', 'Integration has been deleted'),
                 'error' => Yii::t('hipanel.integrations', 'Failed to delete integration'),
-            ]
+            ],
+            'enable' => [
+                'class' => SmartPerformAction::class,
+                'success' => Yii::t('hipanel.integrations', 'Integrations have been enabled'),
+                'error' => Yii::t('hipanel.integrations', 'Failed to enable integrations'),
+            ],
+            'disable' => [
+                'class' => SmartPerformAction::class,
+                'success' => Yii::t('hipanel.integrations', 'Integrations have been disabled'),
+                'error' => Yii::t('hipanel.integrations', 'Failed to disable integrations'),
+            ],
         ], $this->getMandatoryActions());
-
-        return $actions;
     }
 
     public function getStates()
