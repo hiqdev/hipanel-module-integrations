@@ -30,6 +30,6 @@ return [
     'Information about integration' => 'Подробная информация',
     'Failed to disable integrations' => 'Ошибка при отключении интеграций',
     'Failed to enable integrations' => 'Ошибка при включении интеграций',
-    'Integrations has been disabled' => 'Инетграции отключены',
-    'Integrations has been enabled' => 'Инетграции включены',
+    'Integrations have been disabled' => 'Инетграции отключены',
+    'Integrations have been enabled' => 'Инетграции включены',
 ];

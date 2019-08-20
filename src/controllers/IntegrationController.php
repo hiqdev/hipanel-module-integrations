@@ -80,12 +80,12 @@ class IntegrationController extends CrudController
             ],
             'enable' => [
                 'class' => SmartPerformAction::class,
-                'success' => Yii::t('hipanel.integrations', 'Integrations has been enabled'),
+                'success' => Yii::t('hipanel.integrations', 'Integrations have been enabled'),
                 'error' => Yii::t('hipanel.integrations', 'Failed to enable integrations'),
             ],
             'disable' => [
                 'class' => SmartPerformAction::class,
-                'success' => Yii::t('hipanel.integrations', 'Integrations has been disabled'),
+                'success' => Yii::t('hipanel.integrations', 'Integrations have been disabled'),
                 'error' => Yii::t('hipanel.integrations', 'Failed to disable integrations'),
             ],
         ], $this->getMandatoryActions());
