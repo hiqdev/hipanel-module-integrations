@@ -83,13 +83,13 @@ class IntegrationController extends CrudController
                 'class' => SmartPerformAction::class,
                 'success' => Yii::t('hipanel.integrations', 'Integrations have been enabled'),
                 'error' => Yii::t('hipanel.integrations', 'Failed to enable integrations'),
-                'on beforeSave' => $this->setIdInBeforeSaveModel(),
+                'on beforeSave' => $this->setIdInModelBeforeSave(),
             ],
             'disable' => [
                 'class' => SmartPerformAction::class,
                 'success' => Yii::t('hipanel.integrations', 'Integrations have been disabled'),
                 'error' => Yii::t('hipanel.integrations', 'Failed to disable integrations'),
-                'on beforeSave' => $this->setIdInBeforeSaveModel(),
+                'on beforeSave' => $this->setIdInModelBeforeSave(),
             ],
         ], $this->getMandatoryActions());
     }
@@ -117,18 +117,19 @@ class IntegrationController extends CrudController
         return $this->providersDataProvider->getProviderActions();
     }
 
-    private function setIdInBeforeSaveModel(): \Closure
+    private function setIdInModelBeforeSave(): \Closure
     {
         return function (Event $event): void {
-            /** @var \hipanel\actions\Action $action */
-            $action = $event->sender;
             $id = Yii::$app->request->get('id');
             if (!empty($id)) {
-                foreach ($action->collection->models as $model) {
-                    $model->setAttributes(array_filter([
-                        'id' => $id,
-                    ]));
-                }
+                return;
+            }
+            /** @var \hipanel\actions\Action $action */
+            $action = $event->sender;
+            foreach ($action->collection->models as $model) {
+                $model->setAttributes(array_filter([
+                    'id' => $id,
+                ]));
             }
         };
     }
