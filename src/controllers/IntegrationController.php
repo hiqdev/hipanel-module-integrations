@@ -18,6 +18,7 @@ use hipanel\base\CrudController;
 use hipanel\filters\EasyAccessControl;
 use hipanel\modules\integrations\data\ProvidersDataProvider;
 use Yii;
+use yii\base\Event;
 use yii\base\Module;
 
 class IntegrationController extends CrudController
@@ -82,11 +83,13 @@ class IntegrationController extends CrudController
                 'class' => SmartPerformAction::class,
                 'success' => Yii::t('hipanel.integrations', 'Integrations have been enabled'),
                 'error' => Yii::t('hipanel.integrations', 'Failed to enable integrations'),
+                'on beforeSave' => $this->setIdInModelBeforeSave(),
             ],
             'disable' => [
                 'class' => SmartPerformAction::class,
                 'success' => Yii::t('hipanel.integrations', 'Integrations have been disabled'),
                 'error' => Yii::t('hipanel.integrations', 'Failed to disable integrations'),
+                'on beforeSave' => $this->setIdInModelBeforeSave(),
             ],
         ], $this->getMandatoryActions());
     }
@@ -112,5 +115,20 @@ class IntegrationController extends CrudController
     private function getMandatoryActions(): array
     {
         return $this->providersDataProvider->getProviderActions();
+    }
+
+    private function setIdInModelBeforeSave(): \Closure
+    {
+        return function (Event $event): void {
+            $id = Yii::$app->request->get('id');
+            if (empty($id)) {
+                return;
+            }
+            /** @var \hipanel\actions\Action $action */
+            $action = $event->sender;
+            foreach ($action->collection->models as $model) {
+                $model->id = $id;
+            }
+        };
     }
 }

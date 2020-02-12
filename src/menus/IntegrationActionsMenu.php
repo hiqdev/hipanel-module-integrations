@@ -37,6 +37,32 @@ class IntegrationActionsMenu extends MenuAlias
                     'data-pjax' => 0,
                 ],
             ],
+            'enable' => [
+                'label' => Yii::t('hipanel', 'Enable'),
+                'icon' => 'fa-pencil',
+                'url' => ['@integration/enable', 'id' => $this->model->id],
+                'encode' => false,
+                'visible' => Yii::$app->user->can('integration.update'),
+                'linkOptions' => [
+                    'data' => [
+                        'method' => 'POST',
+                        'pjax' => '0',
+                    ],
+                ],
+            ],
+            'disable' => [
+                'label' => Yii::t('hipanel', 'Disable'),
+                'icon' => 'fa-pencil',
+                'url' => ['@integration/disable', 'id' => $this->model->id],
+                'encode' => false,
+                'visible' => Yii::$app->user->can('integration.update'),
+                'linkOptions' => [
+                    'data' => [
+                        'method' => 'POST',
+                        'pjax' => '0',
+                    ],
+                ],
+            ],
             'delete' => [
                 'label' => Yii::t('hipanel', 'Delete'),
                 'icon' => 'fa-trash',
