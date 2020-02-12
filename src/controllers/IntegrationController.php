@@ -11,7 +11,6 @@
 namespace hipanel\modules\integrations\controllers;
 
 use hipanel\actions\IndexAction;
-use hipanel\actions\RedirectAction;
 use hipanel\actions\SmartDeleteAction;
 use hipanel\actions\SmartPerformAction;
 use hipanel\actions\ViewAction;
