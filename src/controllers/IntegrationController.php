@@ -11,6 +11,7 @@
 namespace hipanel\modules\integrations\controllers;
 
 use hipanel\actions\IndexAction;
+use hipanel\actions\RedirectAction;
 use hipanel\actions\SmartDeleteAction;
 use hipanel\actions\SmartPerformAction;
 use hipanel\actions\ViewAction;
@@ -18,6 +19,7 @@ use hipanel\base\CrudController;
 use hipanel\filters\EasyAccessControl;
 use hipanel\modules\integrations\data\ProvidersDataProvider;
 use Yii;
+use yii\base\Event;
 use yii\base\Module;
 
 class IntegrationController extends CrudController
@@ -82,11 +84,13 @@ class IntegrationController extends CrudController
                 'class' => SmartPerformAction::class,
                 'success' => Yii::t('hipanel.integrations', 'Integrations have been enabled'),
                 'error' => Yii::t('hipanel.integrations', 'Failed to enable integrations'),
+                'on beforeSave' => $this->setIdInBeforeSaveModel(),
             ],
             'disable' => [
                 'class' => SmartPerformAction::class,
                 'success' => Yii::t('hipanel.integrations', 'Integrations have been disabled'),
                 'error' => Yii::t('hipanel.integrations', 'Failed to disable integrations'),
+                'on beforeSave' => $this->setIdInBeforeSaveModel(),
             ],
         ], $this->getMandatoryActions());
     }
@@ -112,5 +116,21 @@ class IntegrationController extends CrudController
     private function getMandatoryActions(): array
     {
         return $this->providersDataProvider->getProviderActions();
+    }
+
+    private function setIdInBeforeSaveModel(): \Closure
+    {
+        return function (Event $event): void {
+            /** @var \hipanel\actions\Action $action */
+            $action = $event->sender;
+            $id = Yii::$app->request->get('id');
+            if (!empty($id)) {
+                foreach ($action->collection->models as $model) {
+                    $model->setAttributes(array_filter([
+                        'id' => $id,
+                    ]));
+                }
+            }
+        };
     }
 }
