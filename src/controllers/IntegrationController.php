@@ -117,7 +117,6 @@ class IntegrationController extends CrudController
         return $this->providersDataProvider->getProviderActions();
     }
 
-    /** @noinspection PhpPossiblePolymorphicInvocationInspection */
     private function setIdInModelBeforeSave(): \Closure
     {
         return function (Event $event): void {
@@ -128,7 +127,7 @@ class IntegrationController extends CrudController
             /** @var \hipanel\actions\Action $action */
             $action = $event->sender;
             foreach ($action->collection->models as $model) {
-                $model->setAttribute('id', $id);
+                $model->id = $id;
             }
         };
     }
