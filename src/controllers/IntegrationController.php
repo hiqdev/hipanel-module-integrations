@@ -117,19 +117,18 @@ class IntegrationController extends CrudController
         return $this->providersDataProvider->getProviderActions();
     }
 
+    /** @noinspection PhpPossiblePolymorphicInvocationInspection */
     private function setIdInModelBeforeSave(): \Closure
     {
         return function (Event $event): void {
             $id = Yii::$app->request->get('id');
-            if (!empty($id)) {
+            if (empty($id)) {
                 return;
             }
             /** @var \hipanel\actions\Action $action */
             $action = $event->sender;
             foreach ($action->collection->models as $model) {
-                $model->setAttributes(array_filter([
-                    'id' => $id,
-                ]));
+                $model->setAttribute('id', $id);
             }
         };
     }
