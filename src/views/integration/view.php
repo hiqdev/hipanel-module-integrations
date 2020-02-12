@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 $onlyColumns = Json::decode($model->provider->data);
 unset($onlyColumns['api_type_id']);
-$columns = array_merge(['name', 'access'], array_keys($onlyColumns));
+$columns = array_merge(['name', 'access'], array_keys($onlyColumns ?? []));
 
 ?>
 <div class="row">
