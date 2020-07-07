@@ -22,11 +22,11 @@ return [
             'translations' => [
                 'hipanel.integrations' => [
                     'class' => \yii\i18n\PhpMessageSource::class,
-                    'basePath' => '@hipanel/modules/integrations/messages',
+                    'basePath' => dirname(__DIR__) . '/src/messages',
                 ],
                 'hipanel.integrations.types' => [
                     'class' => \yii\i18n\PhpMessageSource::class,
-                    'basePath' => '@hipanel/modules/integrations/messages',
+                    'basePath' => dirname(__DIR__) . '/src/messages',
                 ],
             ],
         ],
