@@ -30,4 +30,8 @@ return [
 
     'seo' => 'SEO data',
     'server' => 'Сервер',
+
+    'Bank card' => 'Банковская карта',
+    'Purse' => 'Кошелек',
+    'Phone' => 'Телефон',
 ];

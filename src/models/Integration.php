@@ -28,8 +28,8 @@ class Integration extends Model
     {
         return array_merge(parent::rules(), [
             [['id', 'client_id', 'type_id', 'state_id', 'provider_id'], 'integer'],
-            [['commission'], 'number'],
-            [['client', 'state', 'provider_name', 'provider_label', 'name', 'url', 'login', 'access', 'password', 'type', 'type_label', 'state_label', 'currency', 'key2', 'key3'], 'string'],
+            [['commission', 'system_commission'], 'number'],
+            [['client', 'state', 'provider_name', 'provider_label', 'name', 'url', 'login', 'access', 'password', 'type', 'type_label', 'state_label', 'currency', 'key2', 'key3', 'payment_method'], 'string'],
             ['id', 'required', 'on' => ['delete', 'enable', 'disable']],
         ]);
     }
