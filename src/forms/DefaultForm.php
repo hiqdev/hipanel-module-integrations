@@ -156,7 +156,6 @@ class DefaultForm extends Model implements IntegrationFormInterface
 
         foreach ($this->getDefaultFields() as $attribute => $value) {
             $cfg = [];
-
             if (strstr($attribute, 'url')) {
                 $cfg['type'] = IntegrationFormBuilder::INPUT_HTML5;
                 $cfg['html5type'] = 'url';

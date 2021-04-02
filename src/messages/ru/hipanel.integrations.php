@@ -32,4 +32,6 @@ return [
     'Failed to enable integrations' => 'Ошибка при включении интеграций',
     'Integrations have been disabled' => 'Инетграции отключены',
     'Integrations have been enabled' => 'Инетграции включены',
+    'Payment method' => 'Метод оплаты',
+    'System commission' => 'Комиссия системы',
 ];
