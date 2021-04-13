@@ -55,7 +55,7 @@ class IntegrationGridView extends BoxedGridView
                     ]);
                 },
                 'sortAttribute' => 'type',
-                'format' => 'raw',
+                'format' => 'html',
                 'value' => function (Integration $model): string {
                     return IntegrationType::widget([
                         'model' => $model,
