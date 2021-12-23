@@ -36,4 +36,7 @@ return [
     'System commission' => 'Комиссия системы',
     'System commission in percent' => 'Комиссия системы в процентах',
     'System commission in cents' => 'Комиссия системы в центах',
+    'System fee in cents' => 'Комиссия системы в центах',
+    'Login' => 'Логин',
+    'Password' => 'Пароль',
 ];
