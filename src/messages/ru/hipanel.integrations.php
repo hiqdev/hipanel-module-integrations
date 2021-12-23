@@ -34,4 +34,6 @@ return [
     'Integrations have been enabled' => 'Инетграции включены',
     'Payment method' => 'Метод оплаты',
     'System commission' => 'Комиссия системы',
+    'System commission in percent' => 'Комиссия системы в процентах',
+    'System commission in cents' => 'Комиссия системы в центах',
 ];

@@ -9,10 +9,13 @@ class PaypalForm extends DefaultForm
 {
     public $system_commission;
 
+    public $system_fee;
+
     public function rules(): array
     {
         return array_merge(parent::rules(), [
             [['system_commission'], 'number'],
+            [['system_fee'], 'integer'],
         ]);
     }
 
@@ -20,7 +23,8 @@ class PaypalForm extends DefaultForm
     {
         return array_merge(parent::attributeLabels(), [
             'login' => Yii::t('hipanel.integrations', 'Email'),
-            'system_commission' => Yii::t('hipanel.integrations', 'System commission'),
+            'system_commission' => Yii::t('hipanel.integrations', 'System commission in percent'),
+            'system_fee' => Yii::t('hipanel.integrations', 'System fee in cents'),
         ]);
     }
 
@@ -32,7 +36,15 @@ class PaypalForm extends DefaultForm
                 'html5type' => 'number',
                 'options' => [
                     'min' => 0,
-                    'step' => 0.01
+                    'step' => 0.01,
+                ],
+            ],
+            'system_fee' => [
+                'type' => IntegrationFormBuilder::INPUT_HTML5,
+                'html5type' => 'number',
+                'options' => [
+                    'min' => 0,
+                    'step' => 1,
                 ],
             ],
         ]);
