@@ -162,6 +162,8 @@ class DefaultForm extends Model implements IntegrationFormInterface
             } elseif ($attribute === 'type_id') {
                 $cfg['type'] = IntegrationFormBuilder::INPUT_HIDDEN;
                 $cfg['label'] = false;
+            } elseif ($attribute === 'password') {
+                $cfg['type'] = IntegrationFormBuilder::INPUT_PASSWORD;
             } elseif ($attribute === 'currency') {
                 $cfg['type'] = IntegrationFormBuilder::INPUT_DROPDOWN_LIST;
                 $cfg['options']['prompt'] = '--';
