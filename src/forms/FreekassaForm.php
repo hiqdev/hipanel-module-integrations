@@ -5,32 +5,35 @@ namespace hipanel\modules\integrations\forms;
 use hipanel\modules\integrations\widgets\IntegrationFormBuilder;
 use Yii;
 
-class PaypalForm extends DefaultForm
+class FreekassaForm extends DefaultForm
 {
     public $system_commission;
 
-    public $system_fee;
 
     public function rules(): array
     {
         return array_merge(parent::rules(), [
+            [['login'], 'integer'],
             [['system_commission'], 'number'],
-            [['system_fee'], 'integer'],
+            [['key2'], 'safe'],
         ]);
     }
 
     public function attributeLabels(): array
     {
         return array_merge(parent::attributeLabels(), [
-            'login' => Yii::t('hipanel.integrations', 'Email'),
+            'login' => Yii::t('hipanel.integrations', 'ID'),
             'system_commission' => Yii::t('hipanel.integrations', 'System commission in percent'),
-            'system_fee' => Yii::t('hipanel.integrations', 'System fee in cents'),
+            'key2' => Yii::t('hipanel.integrations', 'Key'),
         ]);
     }
 
     public function getFormConfig(): array
     {
         return array_merge(parent::getFormConfig(), [
+            'key2' => [
+                'type' => IntegrationFormBuilder::INPUT_PASSWORD,
+            ],
             'system_commission' => [
                 'type' => IntegrationFormBuilder::INPUT_HTML5,
                 'html5type' => 'number',
@@ -39,16 +42,6 @@ class PaypalForm extends DefaultForm
                     'step' => 0.01,
                 ],
             ],
-            'system_fee' => [
-                'type' => IntegrationFormBuilder::INPUT_HTML5,
-                'html5type' => 'number',
-                'options' => [
-                    'min' => 0,
-                    'step' => 1,
-                ],
-            ],
         ]);
     }
-
-
 }
