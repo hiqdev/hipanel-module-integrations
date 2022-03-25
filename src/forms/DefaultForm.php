@@ -69,7 +69,7 @@ class DefaultForm extends Model implements IntegrationFormInterface
             unset($data['api_type_id']);
         }
         if ($data) {
-            return array_filter($data, function ($value, &$attribute) {
+            return array_filter($data, function ($value, $attribute) {
                 return $this->hasProperty($attribute) ? $attribute : null;
             }, ARRAY_FILTER_USE_BOTH);
         }
