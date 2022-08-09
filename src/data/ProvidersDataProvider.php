@@ -67,7 +67,7 @@ final class ProvidersDataProvider
                     ]),
                     'scenario' => 'create',
                 ],
-                'success' => Yii::t('hipanel.integrations', '{type} access has been created', ['type' => ucfirst($provider->label)]),
+                'success' => Yii::t('hipanel.integrations', '{type} access has been created', ['type' => ucfirst($provider->label ?? $provider->name)]),
             ];
             $actions['update-' . $provider->name] = [
                 'class' => SmartUpdateAction::class,
@@ -92,7 +92,7 @@ final class ProvidersDataProvider
 
                     return $result;
                 },
-                'success' => Yii::t('hipanel.integrations', '{type} access has been updated', ['type' => ucfirst($provider->label)]),
+                'success' => Yii::t('hipanel.integrations', '{type} access has been updated', ['type' => ucfirst($provider->label ?? $provider->name)]),
             ];
             $actions["validate-{$provider->name}-form"] = [
                 'class' => ValidateFormAction::class,
