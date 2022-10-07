@@ -77,7 +77,7 @@ class Index extends Integration
         $I->click('Create integration');
         $I->waitForElement('ul.dropdown-menu');
         foreach ($variants as $variant) {
-            $I->seeElement(['css' => "a[data-target$=\"for-{$variant}\"]"]);
+            $I->seeElement(['css' => "a[data-target$=\"for-$variant\"]"]);
         }
 
         return $this;

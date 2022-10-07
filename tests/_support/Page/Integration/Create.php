@@ -13,15 +13,12 @@ class Create extends Integration
         $I->amOnPage(Url::toRoute(['@integration/index']));
     }
 
-    public function createByProviderName(string $providerName, array $formData, bool $forceCreate = false): self
+    public function createByProviderName(string $providerName, array $formData): self
     {
         $action = 'create';
         $I = $this->tester;
-        if (!$forceCreate) {
-            $I->dontSeeElement("//td/a[contains(text(), '{$providerName}')][@class='bold']");
-        }
-        $I->seeElementInDOM(['css' => "a[href$=\"{$action}-{$providerName}\"]"]);
-        $I->amOnPage(Url::to("@integration/{$action}-{$providerName}"));
+        $I->seeElementInDOM(['css' => "a[href$=\"$action-$providerName\"]"]);
+        $I->amOnPage(Url::to("@integration/$action-$providerName"));
         $this->setItem($providerName, $action, $formData);
 
         return $this;

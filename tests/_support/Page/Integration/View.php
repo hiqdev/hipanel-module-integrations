@@ -19,7 +19,7 @@ class View extends Integration
         $I = $this->tester;
 
         $I->amOnPage(Url::to('@integration/index'));
-        $I->click("//a[contains(text(), '{$this->name}')]");
+        $I->click("//a[contains(text(), '$this->name')]");
         $I->waitForJS("return $.active == 0;", 30);
         $I->seeInTitle($this->name);
         $I->seeInCurrentUrl('/integration/view?id=');
