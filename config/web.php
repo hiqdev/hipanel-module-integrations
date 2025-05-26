@@ -52,7 +52,6 @@ return [
                         ],
                         'where' => [
                             'after' => ['tickets', 'finance', 'clients', 'dashboard'],
-                            'before' => ['hosting', 'server', 'domain', 'stock'],
                         ],
                     ],
                 ],
